@@ -1,7 +1,26 @@
-requests
-python-dotenv
-pandas
-hopsworks
-streamlit
-pyarrow
-rich
+# Unified AQI Hopsworks Pipeline Dependencies
+# ============================================
+
+# Core data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# API and HTTP requests
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Date and time handling
+python-dateutil>=2.8.0
+
+# Hopsworks integration
+hopsworks>=4.2.0,<4.5.0
+pyarrow>=13.0.0
+
+# Display and formatting
+rich>=13.0.0
+
+# Web interface (existing)
+streamlit>=1.28.0
+
+# Optional: For enhanced data validation
+# scikit-learn>=1.3.0  # Uncomment if you want to add ML-based outlier detection

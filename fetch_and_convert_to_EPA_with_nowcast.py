@@ -156,7 +156,7 @@ def compute_nowcast(series: pd.Series) -> pd.Series:
             continue
         c_min, c_max = window.min(), window.max()
         ratio = c_min / c_max if c_max > 0 else 0
-        weight_factor = ratio ** 11 if ratio > 0.5 else 0.5
+        weight_factor = max(min(ratio ** 11, 0.5), 0.5)
         weights = [weight_factor ** (len(window) - j - 1) for j in range(len(window))]
         nowcast = (window.values * weights).sum() / sum(weights)
         nowcast_vals.append(nowcast)
@@ -290,7 +290,6 @@ def display_table_rich(df, last_n=None):
 
 # ============================================================
 # Main Execution
-# ============================================================
 if __name__ == "__main__":
     end_date = datetime.now(timezone.utc)
     start_date = end_date - relativedelta(months=1)
@@ -298,10 +297,30 @@ if __name__ == "__main__":
     data = fetch_aqi_data(LAT, LON, start_date, end_date)
     df = json_to_dataframe(data)
     if df is not None and not df.empty:
-        df.dropna(inplace=True)
-        display_table_rich(df)
-        df.to_csv("karachi_aqi_data_nowcast.csv", index=False)
-        print(f"\n💾 Saved {len(df)} records → karachi_aqi_data_nowcast.csv")
-        print("ℹ️ Note: First few rows may have NaN until 8/12 hours of data are available.")
+        # Keep only rows where target is present
+        df.dropna(subset=['aqi_epa_calc'], inplace=True)
+
+        # --- Keep core features + target ---
+        keep_cols = [
+            "datetime",
+            "aqi_epa_calc", # target variable
+            "pm2_5_nowcast",
+            "pm10_nowcast",
+            "co_ppm_8hr_avg",
+            "no2_ppb",
+            "so2_ppb"
+            # "o3_ppb_8hr_avg",  # O3 excluded due to low correlation
+        ]
+        df_clean = df[keep_cols].copy()
+
+        # --- Optionally drop rows with NaNs in any core feature ---
+        df_clean.dropna(inplace=True)
+
+        # --- Display & Save ---
+        display_table_rich(df_clean)
+        df_clean.to_csv("karachi_aqi_clean.csv", index=False)
+        print(f"\n💾 Saved {len(df_clean)} records → karachi_aqi_clean.csv")
+        print("ℹ️ Data ready for exploration / feature engineering.")
     else:
         print("⚠️ No data available for the specified range.")
+
