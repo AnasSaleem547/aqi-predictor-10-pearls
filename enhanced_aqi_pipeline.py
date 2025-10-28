@@ -343,7 +343,7 @@ def create_temporal_features(df):
     df['is_weekend'] = df['day_of_week'].isin([5, 6]).astype(int)
     
     # Rush hour indicators (based on EDA traffic patterns) - using local Pakistan time
-    df['is_morning_rush'] = df['hour'].isin([8, 9,10]).astype(int)
+    df['is_morning_rush'] = df['hour'].isin([8, 9]).astype(int)
     df['is_evening_rush'] = df['hour'].isin([17, 18, 19,20,21,22]).astype(int)
     df['is_rush_hour'] = (df['is_morning_rush'] | df['is_evening_rush']).astype(int)
     

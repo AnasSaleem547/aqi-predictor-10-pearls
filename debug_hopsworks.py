@@ -1,80 +1,70 @@
 #!/usr/bin/env python3
 """
-Debug script to check Hopsworks feature groups and understand connection issues.
+Debug Hopsworks Feature Group Retrieval
+=======================================
+
+This script helps debug the issue with retrieving features from Hopsworks.
 """
 
+import hopsworks
 import os
 from dotenv import load_dotenv
-import hopsworks
 
-# Load environment variables
 load_dotenv()
 
-HOPSWORKS_API_KEY = os.getenv("HOPSWORKS_API_KEY")
-HOPSWORKS_PROJECT_NAME = os.getenv("HOPSWORKS_PROJECT")
-FEATURE_GROUP_NAME = "karachifeatures"
-FEATURE_GROUP_VERSION = 1
-
-def debug_hopsworks():
-    """Debug Hopsworks connection and feature groups."""
+def debug_feature_group_retrieval():
+    """Debug the feature group retrieval process."""
+    
     try:
         print("🔗 Connecting to Hopsworks...")
         project = hopsworks.login(
-            api_key_value=HOPSWORKS_API_KEY,
-            project=HOPSWORKS_PROJECT_NAME
+            project=os.getenv('HOPSWORKS_PROJECT'),
+            api_key_value=os.getenv('HOPSWORKS_API_KEY')
         )
         fs = project.get_feature_store()
-        print("✅ Connected to Hopsworks successfully")
+        print("✅ Connected successfully")
         
-        # List all feature groups
-        print("\n📋 Listing all feature groups:")
-        try:
-            feature_groups = fs.get_feature_groups()
-            for fg in feature_groups:
-                print(f"  - {fg.name} (version {fg.version})")
-        except Exception as e:
-            print(f"❌ Error listing feature groups: {str(e)}")
+        print("\n🔍 Testing different versions...")
         
-        # Try to get our specific feature group
-        print(f"\n🔍 Checking for feature group: {FEATURE_GROUP_NAME}")
-        try:
-            fg = fs.get_feature_group(FEATURE_GROUP_NAME, version=FEATURE_GROUP_VERSION)
-            if fg:
-                print(f"✅ Found feature group: {fg.name}")
-                print(f"   Version: {fg.version}")
-                print(f"   Description: {fg.description}")
-                print(f"   Primary key: {fg.primary_key}")
-                print(f"   Event time: {fg.event_time}")
-                
-                # Try to get schema
-                try:
-                    schema = fg.get_feature_descriptions()
-                    print(f"   Schema: {schema}")
-                except Exception as schema_error:
-                    print(f"   Schema error: {str(schema_error)}")
-                    
-            else:
-                print("❌ Feature group returned None")
-        except Exception as e:
-            print(f"❌ Error getting feature group: {str(e)}")
-            
-            # Try to create a new one
-            print(f"\n🆕 Attempting to create feature group: {FEATURE_GROUP_NAME}")
+        # Test different versions to see which ones exist
+        for version in [1, 2, 3, 4, 5]:
             try:
-                new_fg = fs.create_feature_group(
-                    name=FEATURE_GROUP_NAME,
-                    version=FEATURE_GROUP_VERSION,
-                    description="Karachi AQI features with EPA calculations and engineered features",
-                    primary_key=["datetime"],
-                    event_time="datetime",
-                    online_enabled=True,
+                feature_group = fs.get_feature_group(
+                    name='karachifeatures',
+                    version=version
                 )
-                print(f"✅ Created feature group: {new_fg.name}")
-            except Exception as create_error:
-                print(f"❌ Failed to create feature group: {str(create_error)}")
+                
+                if feature_group is not None:
+                    print(f"✅ Found karachifeatures v{version}")
+                    print(f"   Name: {getattr(feature_group, 'name', 'MISSING')}")
+                    print(f"   Version: {getattr(feature_group, 'version', 'MISSING')}")
+                    
+                    # Try to get some basic info
+                    try:
+                        query = feature_group.select_all()
+                        df = query.read()  # Remove limit parameter that's not supported
+                        print(f"   Records available: Yes (sample shape: {df.shape})")
+                        return feature_group, version  # Return the working one
+                    except Exception as e:
+                        print(f"   Records available: No ({e})")
+                else:
+                    print(f"❌ karachifeatures v{version} returned None")
+                    
+            except Exception as e:
+                print(f"❌ karachifeatures v{version} error: {e}")
+        
+        print("\n💡 DIAGNOSIS:")
+        print("   The feature group exists but may be empty or corrupted.")
+        print("   You need to run the pipeline to populate it with data.")
+        print("   Run: python unified_aqi_hopsworks_pipeline.py backfill")
+        
+        return None, None
         
     except Exception as e:
-        print(f"❌ Failed to connect to Hopsworks: {str(e)}")
+        print(f"❌ Connection error: {e}")
+        import traceback
+        traceback.print_exc()
+        return None, None
 
 if __name__ == "__main__":
-    debug_hopsworks()
+    debug_feature_group_retrieval()

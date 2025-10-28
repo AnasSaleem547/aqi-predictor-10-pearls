@@ -33,8 +33,16 @@ import math
 import requests
 import pandas as pd
 import numpy as np
-from datetime import datetime, timezone, timedelta
+import requests
+import json
+from datetime import datetime, timedelta, timezone
+import time
+import pytz
 import zoneinfo
+from typing import Optional, Tuple, Dict, Any, List
+import warnings
+warnings.filterwarnings('ignore')
+
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from rich.console import Console
@@ -288,24 +296,107 @@ def json_to_dataframe(json_data) -> Optional[pd.DataFrame]:
 
     # AQI computation
     df["aqi_epa_calc"] = df.apply(calc_overall_aqi, axis=1)
+    
+    # Convert to timezone-naive PKT for consistency with gap detection
+    df["datetime"] = df["datetime"].dt.tz_localize(None)
 
     return df
 
 # ============================================================
 # Feature Engineering Functions
 # ============================================================
+
+def validate_input_data(df: pd.DataFrame) -> tuple[bool, list[str]]:
+    """
+    Validate input data quality before feature engineering.
+    
+    Args:
+        df: Input DataFrame
+        
+    Returns:
+        Tuple of (is_valid, issues_list)
+    """
+    issues = []
+    required_cols = ['pm2_5_nowcast', 'pm10_nowcast', 'co_ppm_8hr_avg', 'no2_ppb']
+    
+    for col in required_cols:
+        if col not in df.columns:
+            issues.append(f"Missing required column: {col}")
+            continue
+            
+        # Check for missing values
+        missing_count = df[col].isnull().sum()
+        if missing_count > 0:
+            issues.append(f"{col}: {missing_count} missing values")
+        
+        # Check for zero values (problematic for ratios and multiplications)
+        if col in ['pm10_nowcast', 'co_ppm_8hr_avg', 'no2_ppb']:
+            zero_count = (df[col] == 0).sum()
+            if zero_count > 0:
+                issues.append(f"{col}: {zero_count} zero values (may cause calculation issues)")
+    
+    return len(issues) == 0, issues
+
+def safe_pm_ratio(pm2_5: float, pm10: float) -> float:
+    """Calculate PM2.5/PM10 ratio with safe division."""
+    if pd.isna(pm2_5) or pd.isna(pm10) or pm10 == 0:
+        return np.nan
+    return pm2_5 / pm10
+
+def safe_traffic_index(co: float, no2: float) -> float:
+    """Calculate traffic index with input validation."""
+    if pd.isna(co) or pd.isna(no2):
+        return np.nan
+    return (no2 * 0.6) + (co * 0.4)
+
+def safe_total_pm(pm2_5: float, pm10: float) -> float:
+    """Calculate total PM with input validation."""
+    if pd.isna(pm2_5) or pd.isna(pm10):
+        return np.nan
+    return pm2_5 + pm10
+
+def safe_pm_weighted(pm2_5: float, pm10: float) -> float:
+    """Calculate weighted PM with input validation."""
+    if pd.isna(pm2_5) or pd.isna(pm10):
+        return np.nan
+    return (pm2_5 * 0.7) + (pm10 * 0.3)
+
 def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
-    """Apply all feature engineering steps in one function."""
-    print("🔧 Applying feature engineering...")
+    """Apply all feature engineering steps with improved error handling."""
+    print("🔧 Applying improved feature engineering...")
     df = df.copy()
     
-    # Engineered ratio and composite features
-    df['pm2_5_pm10_ratio'] = df['pm2_5_nowcast'] / (df['pm10_nowcast'] + 1e-6)
-    df['traffic_index'] = (df['no2_ppb'] * 0.6) + (df['co_ppm_8hr_avg'] * 0.4)
-    df['total_pm'] = df['pm2_5_nowcast'] + df['pm10_nowcast']
-    df['pm_weighted'] = (df['pm2_5_nowcast'] * 0.7) + (df['pm10_nowcast'] * 0.3)
+    # Validate input data
+    is_valid, issues = validate_input_data(df)
+    if not is_valid:
+        print("⚠️  Input data validation issues found:")
+        for issue in issues:
+            print(f"   - {issue}")
+    
+    # Apply safe engineered features
+    print("   📊 Calculating engineered features...")
+    df['pm2_5_pm10_ratio'] = df.apply(
+        lambda row: safe_pm_ratio(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        axis=1
+    )
+    
+    df['traffic_index'] = df.apply(
+        lambda row: safe_traffic_index(row.get('co_ppm_8hr_avg'), row.get('no2_ppb')), 
+        axis=1
+    )
+    
+    df['total_pm'] = df.apply(
+        lambda row: safe_total_pm(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        axis=1
+    )
+    
+    df['pm_weighted'] = df.apply(
+        lambda row: safe_pm_weighted(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        axis=1
+    )
     
     # Temporal features
+    print("   🕐 Calculating temporal features...")
     df['hour'] = df['datetime'].dt.hour
     df['is_rush_hour'] = (
         (df['hour'].isin([7, 8, 9])) | 
@@ -323,17 +414,44 @@ def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     ], [0, 1, 2, 3], default=0)
     
     # Lag features
+    print("   ⏰ Calculating lag features...")
     df['pm2_5_nowcast_lag_1h'] = df['pm2_5_nowcast'].shift(1)
     df['no2_ppb_lag_1h'] = df['no2_ppb'].shift(1)
     
     # Add datetime_id as Unix timestamp for online compatibility
     df['datetime_id'] = df['datetime'].astype('int64') // 10**9
     
-    # Select only production features
+    # Report feature engineering results
+    engineered_features = ['pm2_5_pm10_ratio', 'traffic_index', 'total_pm', 'pm_weighted', 'no2_ppb_lag_1h']
+    print("   📈 Feature engineering results:")
+    for feature in engineered_features:
+        if feature in df.columns:
+            missing_count = df[feature].isnull().sum()
+            total_count = len(df)
+            valid_count = total_count - missing_count
+            print(f"      {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
+    
+    # Select only production features, handling missing columns gracefully
     feature_cols = list(PRODUCTION_FEATURES_SCHEMA.keys())
+    
+    # Check for missing columns and add them with default values if needed
+    missing_cols = []
+    for col in feature_cols:
+        if col not in df.columns:
+            missing_cols.append(col)
+            if col == 'aqi_epa_calc':
+                df[col] = np.nan  # Will be calculated elsewhere in the pipeline
+            elif col == 'so2_ppb':
+                df[col] = np.nan  # Not available in test data
+            else:
+                df[col] = np.nan  # Default for any other missing columns
+    
+    if missing_cols:
+        print(f"⚠️  Added missing columns with default values: {missing_cols}")
+    
     df_features = df[feature_cols].copy()
     
-    print(f"✅ Feature engineering complete. Shape: {df_features.shape}")
+    print(f"✅ Improved feature engineering complete. Shape: {df_features.shape}")
     return df_features
 
 # Duplicate functions removed - using consolidated apply_all_feature_engineering function above
@@ -341,6 +459,238 @@ def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
 # ============================================================
 # Data Quality and Imputation Functions  
 # ============================================================
+# ============================================================
+# Gap Detection and Filling Functions
+# ============================================================
+
+def get_last_record_timestamp(fs) -> Optional[datetime]:
+    """
+    Get the timestamp of the last record in the Hopsworks feature group.
+    
+    Args:
+        fs: Hopsworks feature store
+        
+    Returns:
+        datetime: Timestamp of the last record in PKT, or None if no records exist
+    """
+    try:
+        # Get the latest version of the feature group
+        latest_version = get_latest_feature_group_version(fs, FEATURE_GROUP_NAME)
+        if latest_version == 0:
+            print("📋 No existing feature group found")
+            return None
+        
+        fg = fs.get_feature_group(FEATURE_GROUP_NAME, version=latest_version)
+        if fg is None:
+            print("📋 Feature group not accessible")
+            return None
+        
+        # Query for the latest record by datetime
+        query = fg.select(['datetime'])
+        df_all = query.read()
+        
+        if df_all.empty:
+            print("📋 No records found in feature group")
+            return None
+        
+        # Sort by datetime to get the latest record
+        df_all['datetime'] = pd.to_datetime(df_all['datetime'])
+        df_sorted = df_all.sort_values('datetime', ascending=False)
+        last_timestamp = df_sorted['datetime'].iloc[0]
+        
+        # Convert UTC to PKT for comparison
+        if last_timestamp.tz is None:
+            # If timezone-naive, assume it's already in PKT
+            last_timestamp_pkt = last_timestamp
+        else:
+            # If timezone-aware, convert to PKT
+            last_timestamp_pkt = last_timestamp.astimezone(PKT).replace(tzinfo=None)
+        
+        print(f"📅 Last record in Hopsworks: {last_timestamp_pkt} (PKT)")
+        return last_timestamp_pkt
+        
+    except Exception as e:
+        print(f"⚠️ Error getting last record timestamp: {str(e)}")
+        return None
+
+def detect_missing_hours(fs) -> Tuple[Optional[datetime], Optional[datetime], int]:
+    """
+    Detect missing hours between the last record and current time.
+    
+    Args:
+        fs: Hopsworks feature store
+        
+    Returns:
+        Tuple[start_time, end_time, gap_hours]: 
+        - start_time: When to start fetching (PKT)
+        - end_time: When to end fetching (PKT) 
+        - gap_hours: Number of missing hours
+    """
+    try:
+        # Get last record timestamp
+        last_timestamp = get_last_record_timestamp(fs)
+        
+        # Current time in PKT (timezone-naive to match last_timestamp)
+        current_time_pkt = datetime.now(PKT).replace(tzinfo=None)
+        current_hour = current_time_pkt.replace(minute=0, second=0, microsecond=0)
+        
+        if last_timestamp is None:
+            print("⚠️ No existing records found - this should trigger backfill instead")
+            return None, None, 0
+        
+        # Ensure last_timestamp is timezone-naive for comparison
+        if hasattr(last_timestamp, 'tz') and last_timestamp.tz is not None:
+            last_timestamp = last_timestamp.replace(tzinfo=None)
+        
+        # Calculate the next hour after the last record
+        next_expected_hour = (last_timestamp + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+        
+        # Calculate gap
+        if next_expected_hour >= current_hour:
+            print("✅ No gap detected - data is up to date")
+            return None, None, 0
+        
+        gap_hours = int((current_hour - next_expected_hour).total_seconds() / 3600)
+        
+        print(f"🔍 Gap detected:")
+        print(f"   📅 Last record: {last_timestamp}")
+        print(f"   📅 Next expected: {next_expected_hour}")
+        print(f"   📅 Current hour: {current_hour}")
+        print(f"   ⏰ Missing hours: {gap_hours}")
+        
+        return next_expected_hour, current_hour, gap_hours
+        
+    except Exception as e:
+        print(f"❌ Error detecting missing hours: {str(e)}")
+        return None, None, 0
+
+def fetch_and_process_gap_data(fs, gap_start: datetime, gap_end: datetime, gap_hours: int) -> pd.DataFrame:
+    """
+    Fetch and process data for the detected gap period with robust error handling.
+    
+    Args:
+        fs: Hopsworks feature store
+        gap_start: Start datetime of the gap
+        gap_end: End datetime of the gap  
+        gap_hours: Number of hours in the gap
+        
+    Returns:
+        DataFrame with processed gap data or None if failed
+    """
+    print(f"🔧 Fetching gap data from {gap_start} to {gap_end} ({gap_hours} hours)")
+    
+    try:
+        # For large gaps, process in chunks to avoid API timeouts
+        max_chunk_hours = 48  # Process max 48 hours at a time
+        all_gap_data = []
+        
+        current_start = gap_start
+        chunks_processed = 0
+        max_retries_per_chunk = 3
+        
+        while current_start < gap_end:
+            # Calculate chunk end (don't exceed gap_end)
+            chunk_hours = min(max_chunk_hours, (gap_end - current_start).total_seconds() / 3600)
+            current_end = current_start + timedelta(hours=chunk_hours)
+            
+            if current_end > gap_end:
+                current_end = gap_end
+            
+            chunk_hours_actual = int((current_end - current_start).total_seconds() / 3600)
+            print(f"   📦 Processing chunk {chunks_processed + 1}: {current_start} to {current_end} ({chunk_hours_actual}h)")
+            
+            # Retry mechanism for each chunk
+            chunk_success = False
+            for retry in range(max_retries_per_chunk):
+                try:
+                    # Fetch data for this chunk with extended time range for proper averages
+                    # Add 16 hours before start for proper average calculation
+                    fetch_start = current_start - timedelta(hours=16)
+                    
+                    json_data = fetch_aqi_data_with_retry(LAT, LON, fetch_start, current_end)
+                    if not json_data:
+                        if retry < max_retries_per_chunk - 1:
+                            print(f"      ⚠️ Chunk fetch failed, retry {retry + 1}/{max_retries_per_chunk}")
+                            time.sleep(5 * (retry + 1))  # Exponential backoff
+                            continue
+                        else:
+                            print(f"      ❌ Chunk fetch failed after {max_retries_per_chunk} retries")
+                            break
+                    
+                    # Process chunk data
+                    df_chunk = json_to_dataframe(json_data)
+                    if df_chunk is None or df_chunk.empty:
+                        if retry < max_retries_per_chunk - 1:
+                            print(f"      ⚠️ Empty chunk data, retry {retry + 1}/{max_retries_per_chunk}")
+                            time.sleep(3 * (retry + 1))
+                            continue
+                        else:
+                            print(f"      ❌ Empty chunk data after {max_retries_per_chunk} retries")
+                            break
+                    
+                    # Apply feature engineering
+                    df_chunk_features = apply_all_feature_engineering(df_chunk)
+                    
+                    # Filter to only the gap period (exclude the 16-hour buffer)
+                    df_chunk_gap = df_chunk_features[
+                        (df_chunk_features['datetime'] >= current_start) & 
+                        (df_chunk_features['datetime'] < current_end)
+                    ].copy()
+                    
+                    if not df_chunk_gap.empty:
+                        all_gap_data.append(df_chunk_gap)
+                        print(f"      ✅ Chunk processed: {len(df_chunk_gap)} records")
+                        chunk_success = True
+                        break
+                    else:
+                        if retry < max_retries_per_chunk - 1:
+                            print(f"      ⚠️ No gap data in chunk, retry {retry + 1}/{max_retries_per_chunk}")
+                            time.sleep(2 * (retry + 1))
+                            continue
+                        else:
+                            print(f"      ❌ No gap data in chunk after {max_retries_per_chunk} retries")
+                            break
+                            
+                except Exception as e:
+                    if retry < max_retries_per_chunk - 1:
+                        print(f"      ⚠️ Chunk error: {str(e)}, retry {retry + 1}/{max_retries_per_chunk}")
+                        time.sleep(5 * (retry + 1))
+                        continue
+                    else:
+                        print(f"      ❌ Chunk failed after {max_retries_per_chunk} retries: {str(e)}")
+                        break
+            
+            if not chunk_success:
+                print(f"   ❌ Failed to process chunk {chunks_processed + 1}, continuing with next chunk...")
+                # Continue with next chunk instead of failing completely
+            
+            # Move to next chunk
+            current_start = current_end
+            chunks_processed += 1
+            
+            # Add small delay between chunks to be respectful to API
+            if current_start < gap_end:
+                time.sleep(2)
+        
+        # Combine all chunk data
+        if all_gap_data:
+            gap_data = pd.concat(all_gap_data, ignore_index=True)
+            gap_data = gap_data.sort_values('datetime').drop_duplicates(subset=['datetime'])
+            
+            print(f"✅ Gap data processing completed:")
+            print(f"   📊 Total records: {len(gap_data)}")
+            print(f"   📅 Date range: {gap_data['datetime'].min()} to {gap_data['datetime'].max()}")
+            print(f"   📦 Chunks processed: {chunks_processed}")
+            
+            return gap_data
+        else:
+            print("❌ No gap data could be retrieved from any chunk")
+            return None
+            
+    except Exception as e:
+        print(f"❌ Critical error in gap data processing: {str(e)}")
+        return None
+
 def connect_to_hopsworks() -> Tuple[Any, Any]:
     """Connect to Hopsworks and return project and feature store."""
     if not HOPSWORKS_AVAILABLE:
@@ -399,13 +749,28 @@ def impute_missing_values(df: pd.DataFrame, fs) -> pd.DataFrame:
         if feature in df.columns:
             missing_mask = df[feature].isna() | (df[feature] == 0)
             if missing_mask.any():
+                print(f"  🔧 Imputing {missing_mask.sum()} missing values for {feature}")
+                
+                # Try to get historical data for imputation
                 hist_data = get_historical_data_for_imputation(fs, feature)
                 
                 if len(hist_data) > 0:
                     impute_value = hist_data.median()
+                    print(f"    ✅ Using historical median: {impute_value:.2f} (from {len(hist_data)} historical records)")
                     df.loc[missing_mask, feature] = impute_value
                 else:
-                    df[feature] = df[feature].fillna(method='ffill').fillna(method='bfill')
+                    print(f"    ⚠️ No historical data available, using forward/backward fill")
+                    # Use modern pandas methods instead of deprecated fillna(method=...)
+                    df[feature] = df[feature].ffill().bfill()
+                    
+                    # Check if imputation was successful
+                    remaining_missing = df[feature].isna().sum()
+                    if remaining_missing > 0:
+                        print(f"    ❌ Warning: {remaining_missing} values still missing after imputation")
+                    else:
+                        print(f"    ✅ Successfully imputed all missing values")
+            else:
+                print(f"  ✅ No missing values for {feature}")
     
     return df
 
@@ -690,6 +1055,19 @@ def backfill_pipeline(force: bool = False) -> bool:
         # Apply feature engineering
         df_features = apply_all_feature_engineering(df)
         
+        # For backfill: Drop initial rows with empty NowCast values
+        # NowCast requires historical data, so initial rows will have NaN values
+        print("🧹 Dropping initial rows with empty NowCast values (backfill mode)...")
+        initial_count = len(df_features)
+        
+        # Drop rows where both PM2.5 and PM10 NowCast values are missing
+        nowcast_mask = df_features['pm2_5_nowcast'].notna() & df_features['pm10_nowcast'].notna()
+        df_features = df_features[nowcast_mask].copy()
+        
+        dropped_count = initial_count - len(df_features)
+        print(f"📊 Dropped {dropped_count} initial rows with empty NowCast values")
+        print(f"📊 Remaining records: {len(df_features)}")
+        
         # Remove rows where target is missing
         df_features = df_features.dropna(subset=['aqi_epa_calc'])
         
@@ -720,11 +1098,11 @@ def backfill_pipeline(force: bool = False) -> bool:
 
 def hourly_pipeline() -> bool:
     """
-    Hourly pipeline: Fetch recent data and append to existing feature group.
+    Enhanced hourly pipeline: Detect and fill data gaps, then fetch recent data.
     If feature group doesn't exist, run backfill first.
     """
     print("\n" + "="*60)
-    print("⏰ STARTING HOURLY PIPELINE")
+    print("⏰ STARTING ENHANCED HOURLY PIPELINE WITH GAP DETECTION")
     print("="*60)
     
     try:
@@ -739,6 +1117,46 @@ def hourly_pipeline() -> bool:
                 print("❌ Backfill failed, cannot proceed with hourly pipeline")
                 return False
         
+        # Step 1: Detect missing hours (gaps)
+        print("🔍 Step 1: Detecting data gaps...")
+        gap_start, gap_end, gap_hours = detect_missing_hours(fs)
+        
+        # Step 2: Fill gaps if detected
+        if gap_hours > 0:
+            print(f"🔧 Step 2: Filling {gap_hours} missing hours...")
+            
+            # Only fill gaps if they're reasonable (not more than 7 days = 168 hours)
+            if gap_hours > 168:
+                print(f"⚠️ Gap too large ({gap_hours} hours > 168 hours). Consider running backfill instead.")
+                print("💡 Proceeding with normal hourly update for current hour only.")
+                gap_hours = 0  # Skip gap filling
+            else:
+                gap_data = fetch_and_process_gap_data(fs, gap_start, gap_end, gap_hours)
+                
+                if gap_data is not None and not gap_data.empty:
+                    # Validate gap data quality
+                    is_valid, message = validate_data_quality(gap_data)
+                    if is_valid:
+                        # Upload gap data
+                        gap_success = upload_to_hopsworks(gap_data, fs)
+                        if gap_success:
+                            print(f"✅ Successfully filled {len(gap_data)} missing records")
+                            print(f"   📅 Gap filled from: {gap_data['datetime'].min()}")
+                            print(f"   📅 Gap filled to: {gap_data['datetime'].max()}")
+                        else:
+                            print("❌ Failed to upload gap data")
+                            return False
+                    else:
+                        print(f"❌ Gap data quality validation failed: {message}")
+                        return False
+                else:
+                    print("⚠️ Could not fetch gap data, proceeding with current hour only")
+        else:
+            print("✅ No gaps detected, proceeding with current hour update")
+        
+        # Step 3: Fetch and process current hour data (normal hourly pipeline logic)
+        print("📡 Step 3: Fetching current hour data...")
+        
         # Fetch last 19 hours: 16 hours for proper averages + 3 hours for lag calculation
         # This ensures CO 8hr avg and PM NowCast have sufficient data
         end_date = datetime.now(timezone.utc)
@@ -750,7 +1168,7 @@ def hourly_pipeline() -> bool:
         # Fetch data with retry
         json_data = fetch_aqi_data_with_retry(LAT, LON, start_date, end_date)
         if not json_data:
-            print("❌ Failed to fetch hourly data")
+            print("❌ Failed to fetch current hour data")
             return False
         
         # Process data
@@ -784,6 +1202,16 @@ def hourly_pipeline() -> bool:
         df_latest = df_valid.tail(1).copy()
         print(f"✅ Selected latest record: {df_latest['datetime'].iloc[0]}")
         
+        # Check if this record already exists in Hopsworks (avoid duplicates)
+        latest_timestamp = df_latest['datetime'].iloc[0]
+        last_record_timestamp = get_last_record_timestamp(fs)
+        
+        if last_record_timestamp is not None and latest_timestamp <= last_record_timestamp:
+            print(f"ℹ️ Latest record ({latest_timestamp}) already exists in Hopsworks")
+            print(f"   📅 Last record in Hopsworks: {last_record_timestamp}")
+            print("✅ HOURLY PIPELINE COMPLETED - NO NEW DATA TO ADD")
+            return True
+        
         # Impute missing values using Hopsworks historical data
         df_latest = impute_missing_values(df_latest, fs)
         
@@ -797,8 +1225,12 @@ def hourly_pipeline() -> bool:
         success = upload_to_hopsworks(df_latest, fs)
         
         if success:
-            print(f"\n✅ HOURLY PIPELINE COMPLETED SUCCESSFULLY")
-            print(f"📊 Added {len(df_latest)} new record")
+            total_records_added = (len(gap_data) if gap_hours > 0 and 'gap_data' in locals() and gap_data is not None else 0) + len(df_latest)
+            print(f"\n✅ ENHANCED HOURLY PIPELINE COMPLETED SUCCESSFULLY")
+            print(f"📊 Total records added: {total_records_added}")
+            if gap_hours > 0:
+                print(f"   🔧 Gap records: {len(gap_data) if 'gap_data' in locals() and gap_data is not None else 0}")
+            print(f"   📡 Current hour: {len(df_latest)}")
             print(f"🕐 Latest timestamp: {df_latest['datetime'].iloc[0]}")
             return True
         else:
@@ -863,4 +1295,5 @@ if __name__ == "__main__":
         print(f"  🎯 Target: aqi_epa_calc")
         print(f"  🏪 Feature Group: {FEATURE_GROUP_NAME}")
         print(f"  🌍 Location: Karachi ({LAT}, {LON})")
+
 

@@ -33,7 +33,7 @@ except ImportError:
 HOPSWORKS_PROJECT = os.getenv("HOPSWORKS_PROJECT")
 HOPSWORKS_API_KEY = os.getenv("HOPSWORKS_API_KEY")
 FEATURE_GROUP_NAME = "karachifeatures"
-FEATURE_GROUP_VERSION = 3
+FEATURE_GROUP_VERSION = 1  # Changed from 3 to 1 (the version that actually exists)
 
 # Console for rich output
 console = Console(force_terminal=True, width=200)
@@ -232,7 +232,7 @@ def display_sample_data(df, n_records=10):
     
     console.print(table)
 
-def save_retrieved_data(df, filename="retrieved_karachi_aqi_features.csv"):
+def save_retrieved_data(df, filename="retrieved_karachi_aqi_features8.csv"):
     """Save retrieved data to local CSV file with proper datetime formatting."""
     try:
         # Create a copy for saving to avoid modifying the original
