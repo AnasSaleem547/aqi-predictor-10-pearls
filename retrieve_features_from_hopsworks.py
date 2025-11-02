@@ -232,7 +232,7 @@ def display_sample_data(df, n_records=10):
     
     console.print(table)
 
-def save_retrieved_data(df, filename="retrieved_karachi_aqi_features8.csv"):
+def save_retrieved_data(df, filename="retrieved_karachi_aqi_features12.csv"):
     """Save retrieved data to local CSV file with proper datetime formatting."""
     try:
         # Create a copy for saving to avoid modifying the original

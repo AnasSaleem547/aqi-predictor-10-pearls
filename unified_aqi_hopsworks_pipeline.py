@@ -146,11 +146,11 @@ PRODUCTION_FEATURES_SCHEMA = {
     "total_pm": "float",
     "pm_weighted": "float",
     
-    # Temporal features (4 features)
+    # Temporal features
     "hour": "int",
-    "is_rush_hour": "int",
-    "is_weekend": "int", 
-    "season": "int",
+    "is_rush_hour": "bigint",
+    "is_weekend": "bigint", 
+    "season": "bigint",
     
     # Lag features (2 features)
     "pm2_5_nowcast_lag_1h": "float",
@@ -397,12 +397,12 @@ def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     
     # Temporal features
     print("   🕐 Calculating temporal features...")
-    df['hour'] = df['datetime'].dt.hour
+    df['hour'] = df['datetime'].dt.hour.astype(np.int32)
     df['is_rush_hour'] = (
         (df['hour'].isin([7, 8, 9])) | 
         (df['hour'].isin([17, 18, 19, 20, 21, 22]))
-    ).astype(int)
-    df['is_weekend'] = (df['datetime'].dt.weekday >= 5).astype(int)
+    ).astype(np.int64)
+    df['is_weekend'] = (df['datetime'].dt.weekday >= 5).astype(np.int64)
     
     # Season (based on Karachi climate)
     month = df['datetime'].dt.month
@@ -411,7 +411,7 @@ def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
         month.isin([3, 4, 5]),   # Spring  
         month.isin([6, 7, 8]),   # Summer
         month.isin([9, 10, 11])  # Monsoon
-    ], [0, 1, 2, 3], default=0)
+    ], [0, 1, 2, 3], default=0).astype(np.int64)
     
     # Lag features
     print("   ⏰ Calculating lag features...")
