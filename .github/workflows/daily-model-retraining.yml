@@ -1,4 +1,4 @@
-name: Daily Model Retraining
+name: Daily Model Retraining with Commit
 
 on:
   schedule:
@@ -8,10 +8,15 @@ on:
 jobs:
   daily-model-retraining:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Allow pushing changes
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,4 +46,30 @@ jobs:
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           echo "🚀 Starting daily model retraining..."
-          python unified_model_training.py
+          python unified_model_training.py 2>&1 | tee training_output.txt
+
+      - name: Check for new model files
+        run: |
+          echo "Checking for new model directories..."
+          find randomforest_additional -name "*.pkl" -newer training_output.txt 2>/dev/null || echo "No new RandomForest models"
+          find xgboost_additional -name "*.json" -newer training_output.txt 2>/dev/null || echo "No new XGBoost models"
+          find lgbm_additional -name "*.txt" -newer training_output.txt 2>/dev/null || echo "No new LightGBM models"
+
+      - name: Commit and push model updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Add all model files
+          git add randomforest_additional/ || true
+          git add xgboost_additional/ || true
+          git add lgbm_additional/ || true
+          git add training_output.txt || true
+          
+          # Check if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🤖 Daily model retraining - $(date)"
+            git push
+          fi
