@@ -12,7 +12,7 @@ lightgbm==4.5.0
 optuna==4.1.0
 
 # Feature Store & Cloud
-hopsworks==4.4.2
+hopsworks==4.2.3
 boto3==1.40.59
 
 # Data Visualization
