@@ -47,7 +47,7 @@ jobs:
         HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
       run: |
         echo "🚀 Starting hourly AQI data pipeline..."
-        python unified_aqi_hopsworks_pipeline.py --mode hourly
+        python unified_aqi_hopsworks_pipeline.py hourly
         
     - name: Upload pipeline logs
       if: always()
@@ -57,7 +57,10 @@ jobs:
         path: |
           *.log
           pipeline_output/
+          *.csv
+          *.json
         retention-days: 7
+        if-no-files-found: warn
         
     - name: Notify on success
       if: success()
