@@ -30,7 +30,7 @@ streamlit==1.40.2
 # Utilities
 python-dotenv==1.2.1
 pytz==2025.2
-rich==14.2.0
+rich==13.9.4
 tqdm==4.67.1
 requests==2.32.5
 
