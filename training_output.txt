@@ -1,0 +1,174 @@
+🎯 Unified AQI Model Training Pipeline
+🕐 Pipeline started at: 2025-11-09 23:15:06 PKT
+======================================================================
+
+============================================================
+🚀 Training RandomForest Model
+⏰ Started at: 2025-11-09 23:15:09 PKT
+============================================================
+🚀 Starting AQI Random Forest Training Pipeline...
+============================================================
+📁 Output directory: randomforest_additional/11_09_2025_2315_pkt
+
+📊 Step 1: Fetching data from Hopsworks...
+🔗 Connecting to Hopsworks project: anassale
+2025-11-09 23:15:09,847 INFO: Initializing external client
+2025-11-09 23:15:09,847 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-09 23:15:10,684 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 863, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 428, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
+    raise ValueError(
+ValueError: Cannot have number of folds=6 greater than the number of samples=1.
+
+Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
+✅ Successfully connected to Hopsworks
+✅ Latest version of karachifeatures10: 3
+📥 Retrieving features from: karachifeatures10 (v3)
+📋 Retrieving all records...
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.46s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 1 records
+📊 Shape: (1, 25)
+
+🔧 Step 2: Preprocessing data...
+🔧 Preprocessing data...
+   🧹 Handling missing values...
+   📊 Ensuring engineered features are properly calculated...
+   ➕ Creating lag features for pollutants...
+   ➕ Creating lag features for pm2_5_nowcast...
+   ➕ Creating lag features for pm10_nowcast...
+   ➕ Creating lag features for co_ppm_8hr_avg...
+   ➕ Creating lag features for no2_ppb...
+   ✅ After preprocessing: 1 records
+
+📊 Step 3: Creating time series splits...
+📊 Creating time series splits...
+
+❌ Error in training pipeline: Cannot have number of folds=6 greater than the number of samples=1.
+
+✅ RandomForest training completed successfully!
+   Result: (None, None, None)
+
+============================================================
+🚀 Training LightGBM Model
+⏰ Started at: 2025-11-09 23:15:14 PKT
+============================================================
+🚀 Starting AQI LGBM Training Pipeline
+============================================================
+📁 Attempting to load data from RandomForest CSV first...
+❌ No RandomForest CSV files found, trying general CSV files...
+🔗 Connecting to Hopsworks project: anassale
+2025-11-09 23:15:14,188 INFO: Closing external client and cleaning up certificates.
+Connection closed.
+2025-11-09 23:15:14,190 INFO: Initializing external client
+2025-11-09 23:15:14,190 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-09 23:15:14,831 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 817, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 365, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
+    raise ValueError(
+ValueError: Cannot have number of folds=6 greater than the number of samples=1.
+
+Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
+✅ Successfully connected to Hopsworks
+✅ Latest version of karachifeatures10: 3
+📥 Retrieving features from: karachifeatures10 (v3)
+📋 Retrieving all records...
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.64s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 1 records
+📊 Shape: (1, 25)
+🔧 Preprocessing data...
+   🧹 Handling missing values...
+   📊 Ensuring engineered features are properly calculated...
+   ➕ Creating lag features for pollutants...
+   ➕ Creating lag features for pm2_5_nowcast...
+   ➕ Creating lag features for pm10_nowcast...
+   ➕ Creating lag features for co_ppm_8hr_avg...
+   ➕ Creating lag features for no2_ppb...
+   ✅ After preprocessing: 1 records
+📊 Final dataset shape: (1, 22)
+🎯 Target variable range: 81.0 - 81.0
+📊 Creating time series splits...
+❌ Pipeline failed: Cannot have number of folds=6 greater than the number of samples=1.
+
+✅ LightGBM training completed successfully!
+   Result: None
+
+============================================================
+🚀 Training XGBoost Model
+⏰ Started at: 2025-11-09 23:15:18 PKT
+============================================================
+🚀 Starting AQI XGBoost Training Pipeline...
+============================================================
+📁 Output directory: xgboost_additional/11_09_2025_2315_pkt
+
+📊 Step 1: Fetching data from Hopsworks...
+📁 Attempting to load data from RandomForest CSV first...
+❌ No RandomForest CSV files found, trying general CSV files...
+🔗 Connecting to Hopsworks project: anassale
+2025-11-09 23:15:18,940 INFO: Closing external client and cleaning up certificates.
+Connection closed.
+2025-11-09 23:15:18,942 INFO: Initializing external client
+2025-11-09 23:15:18,942 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-09 23:15:19,705 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 816, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 364, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
+    raise ValueError(
+ValueError: Cannot have number of folds=6 greater than the number of samples=1.
+
+Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
+✅ Successfully connected to Hopsworks
+✅ Latest version of karachifeatures10: 3
+📥 Retrieving features from: karachifeatures10 (v3)
+📋 Retrieving all records...
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.35s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 1 records
+📊 Shape: (1, 25)
+
+🔧 Step 2: Preprocessing data...
+🔧 Preprocessing data...
+   🧹 Handling missing values...
+   📊 Ensuring engineered features are properly calculated...
+   ➕ Creating lag features for pollutants...
+   ➕ Creating lag features for pm2_5_nowcast...
+   ➕ Creating lag features for pm10_nowcast...
+   ➕ Creating lag features for co_ppm_8hr_avg...
+   ➕ Creating lag features for no2_ppb...
+   ✅ After preprocessing: 1 records
+
+📊 Step 3: Creating time series splits...
+📊 Creating time series splits...
+
+❌ Error in training pipeline: Cannot have number of folds=6 greater than the number of samples=1.
+
+✅ XGBoost training completed successfully!
+   Result: (None, None, None)
+
+======================================================================
+📊 TRAINING SUMMARY
+======================================================================
+⏰ Completed at: 2025-11-09 23:15:22 PKT
+✅ Successful: 3/3 models
+   ✅ RandomForest
+   ✅ LightGBM
+   ✅ XGBoost
+
+🎉 All models trained successfully!
+2025-11-09 23:15:22,990 INFO: Closing external client and cleaning up certificates.
+Connection closed.
