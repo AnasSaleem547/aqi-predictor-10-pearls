@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # Allow manual triggering
 
 env:
-  PYTHON_VERSION: '3.10'
+  PYTHON_VERSION: '3.11'
 
 jobs:
   daily-model-retraining:
