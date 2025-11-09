@@ -32,8 +32,8 @@ except ImportError:
 # Configuration
 HOPSWORKS_PROJECT = os.getenv("HOPSWORKS_PROJECT")
 HOPSWORKS_API_KEY = os.getenv("HOPSWORKS_API_KEY")
-FEATURE_GROUP_NAME = "karachifeatures"
-FEATURE_GROUP_VERSION = 1  # Changed from 3 to 1 (the version that actually exists)
+FEATURE_GROUP_NAME = "karachifeatures10"
+# FEATURE_GROUP_VERSION is now determined dynamically
 
 # Console for rich output
 console = Console(force_terminal=True, width=200)
@@ -62,6 +62,35 @@ def connect_to_hopsworks():
     except Exception as e:
         console.print(f"❌ [bold red]Failed to connect to Hopsworks: {str(e)}[/bold red]")
         return None, None
+
+def get_latest_feature_group_version(fs, feature_group_name: str) -> int:
+    """
+    Get the latest version number of a feature group in Hopsworks.
+    
+    Parameters:
+    - fs: Hopsworks feature store
+    - feature_group_name: Name of the feature group
+    
+    Returns:
+    - Latest version number (0 if no versions found)
+    """
+    try:
+        # Get all versions of the feature group
+        feature_groups = fs.get_feature_groups(name=feature_group_name)
+        
+        if not feature_groups:
+            print(f"⚠️ No feature groups found with name: {feature_group_name}")
+            return 0
+        
+        # Get the latest version
+        latest_version = max([fg.version for fg in feature_groups])
+        print(f"✅ Latest version of {feature_group_name}: {latest_version}")
+        return latest_version
+        
+    except Exception as e:
+        print(f"❌ Error getting latest feature group version: {str(e)}")
+        return 0
+
 
 def convert_utc_to_pkt_and_fix_features(df):
     """
@@ -101,10 +130,10 @@ def convert_utc_to_pkt_and_fix_features(df):
         
         # Recalculate other time-based features if they exist
         if 'is_rush_hour' in df.columns:
-            # Rush hours: 7-10 AM and 5-8 PM PKT
-            df['is_rush_hour'] = ((df['hour'] >= 7) & (df['hour'] <= 10)) | ((df['hour'] >= 17) & (df['hour'] <= 20))
+            # Rush hours: 7-9 AM and 5-10 PM PKT (consistent with unified_aqi_hopsworks_pipeline.py)
+            df['is_rush_hour'] = ((df['hour'] >= 7) & (df['hour'] <= 9)) | ((df['hour'] >= 17) & (df['hour'] <= 22))
             df['is_rush_hour'] = df['is_rush_hour'].astype(int)
-            console.print(f"   ✅ Recalculated is_rush_hour based on PKT")
+            console.print(f"   ✅ Recalculated is_rush_hour based on PKT (7-9 AM, 5-10 PM)")
         
         if 'is_weekend' in df.columns:
             # Weekend: Saturday (5) and Sunday (6)
@@ -131,12 +160,17 @@ def retrieve_features(fs, limit=None):
     - DataFrame with retrieved features
     """
     try:
-        console.print(f"\n📥 [bold cyan]Retrieving features from: {FEATURE_GROUP_NAME} (v{FEATURE_GROUP_VERSION})[/bold cyan]")
+        # Get the latest version dynamically
+        latest_version = get_latest_feature_group_version(fs, FEATURE_GROUP_NAME)
+        if latest_version == 0:
+            raise RuntimeError("❌ No feature group versions found in Hopsworks")
+        
+        console.print(f"\n📥 [bold cyan]Retrieving features from: {FEATURE_GROUP_NAME} (v{latest_version})[/bold cyan]")
         
         # Get the feature group
         feature_group = fs.get_feature_group(
             name=FEATURE_GROUP_NAME,
-            version=FEATURE_GROUP_VERSION
+            version=latest_version
         )
         
         console.print(f"   📊 Feature Group: {feature_group.name}")
@@ -232,7 +266,7 @@ def display_sample_data(df, n_records=10):
     
     console.print(table)
 
-def save_retrieved_data(df, filename="retrieved_karachi_aqi_features12.csv"):
+def save_retrieved_data(df, filename="retrieved_karachi_aqi_features15.csv"):
     """Save retrieved data to local CSV file with proper datetime formatting."""
     try:
         # Create a copy for saving to avoid modifying the original

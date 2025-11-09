@@ -1,0 +1,18 @@
+{
+    "num_leaves": 84,
+    "learning_rate": 0.09853331337425734,
+    "feature_fraction": 0.7272013927858006,
+    "bagging_fraction": 0.9899708690365452,
+    "bagging_freq": 10,
+    "min_child_samples": 7,
+    "reg_alpha": 0.0014430745153203518,
+    "reg_lambda": 3.3796011734918734,
+    "max_depth": 10,
+    "min_split_gain": 0.19184536735919178,
+    "subsample_for_bin": 136736,
+    "objective": "regression",
+    "metric": "l2",
+    "boosting_type": "gbdt",
+    "verbose": -1,
+    "random_state": 42
+}

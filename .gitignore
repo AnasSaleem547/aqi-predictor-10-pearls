@@ -79,3 +79,7 @@ logs/
 
 # Optuna study files
 optuna_study.db
+
+IMPLEMENTATION_SUMMARY.md
+QUICK_MODEL_COMPARISON.md
+README.md

@@ -23,6 +23,12 @@ Pipeline Modes:
 ---------------
 - backfill_pipeline(): Initialize with 12 months of historical data
 - hourly_pipeline(): Incremental updates with lag feature support
+
+Important Flags:
+----------------
+--force: Use this flag with backfill_pipeline() to force re-processing of data 
+         even if it already exists in Hopsworks. This is essential when making
+         schema changes or when you want to completely recreate the feature group.
 """
 
 # ============================================================
@@ -30,27 +36,19 @@ Pipeline Modes:
 # ============================================================
 import os
 import math
+import time
 import requests
 import pandas as pd
 import numpy as np
-import requests
-import json
 from datetime import datetime, timedelta, timezone
-import time
-import pytz
 import zoneinfo
 from typing import Optional, Tuple, Dict, Any, List
-import warnings
-warnings.filterwarnings('ignore')
 
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from rich.console import Console
 from rich.table import Table
 import hopsworks
-from typing import Optional, Dict, Any, Tuple
-import warnings
-warnings.filterwarnings('ignore')
 
 # ============================================================
 # Environment & Configuration
@@ -75,9 +73,8 @@ if not HOPSWORKS_AVAILABLE:
 LAT, LON = 24.8546842, 67.0207055  # Karachi coordinates
 PKT = zoneinfo.ZoneInfo("Asia/Karachi")
 
-# Feature Group Configuration
-FEATURE_GROUP_NAME = "karachifeatures"
-FEATURE_GROUP_VERSION = 3  # Increment version to bypass corrupted metadata
+# Feature Group Configuration 
+FEATURE_GROUP_NAME = "karachifeatures10" 
 
 # Data Quality Thresholds
 MISSING_DATA_THRESHOLD = 0.30  # 30% missing data tolerance
@@ -140,21 +137,36 @@ PRODUCTION_FEATURES_SCHEMA = {
     "no2_ppb": "float",
     "so2_ppb": "float",
     
-    # Engineered features (4 features)
+    # Pollutant lag features (4 features - properly created to prevent data leakage)
+    "pm2_5_nowcast_lag_1h": "float",
+    "pm10_nowcast_lag_1h": "float",
+    "co_ppm_8hr_avg_lag_1h": "float",
+    "no2_ppb_lag_1h": "float",
+    
+    # Engineered features (2 features)
     "pm2_5_pm10_ratio": "float",
     "traffic_index": "float",
-    "total_pm": "float",
-    "pm_weighted": "float",
     
-    # Temporal features
+    # Temporal features (4 features)
     "hour": "int",
     "is_rush_hour": "bigint",
     "is_weekend": "bigint", 
     "season": "bigint",
     
-    # Lag features (2 features)
-    "pm2_5_nowcast_lag_1h": "float",
-    "no2_ppb_lag_1h": "float"
+    # Cyclical temporal encodings (4 features)
+    "hour_sin": "float",
+    "hour_cos": "float",
+    "day_of_week_sin": "float",
+    "day_of_week_cos": "float",
+    
+    # AQI lag features REMOVED to prevent data leakage
+    # AQI is calculated from pollutants, so using AQI lag features would require
+    # pollutant measurements to be available, which may not be the case in real-time
+    
+    # Rolling mean features (3 features - 6-hour window)
+    "pm2_5_nowcast_ma_6h": "float",
+    "pm10_nowcast_ma_6h": "float",
+    "no2_ppb_ma_6h": "float"
 }
 
 # ============================================================
@@ -306,6 +318,29 @@ def json_to_dataframe(json_data) -> Optional[pd.DataFrame]:
 # Feature Engineering Functions
 # ============================================================
 
+def create_cyclical_features(df: pd.DataFrame, column: str, period: int) -> pd.DataFrame:
+    """
+    Create cyclical sine and cosine features for temporal data.
+    
+    Args:
+        df: Input DataFrame
+        column: Column name to create cyclical features from (e.g., 'hour', 'day_of_week')
+        period: The period of the cycle (e.g., 24 for hours, 7 for days of week)
+    
+    Returns:
+        DataFrame with added sin and cos columns
+    """
+    if column not in df.columns:
+        print(f"⚠️  Column '{column}' not found in DataFrame, skipping cyclical encoding")
+        return df
+    
+    # Convert to radians and create cyclical features
+    radians = 2 * np.pi * df[column] / period
+    df[f'{column}_sin'] = np.sin(radians)
+    df[f'{column}_cos'] = np.cos(radians)
+    
+    return df
+
 def validate_input_data(df: pd.DataFrame) -> tuple[bool, list[str]]:
     """
     Validate input data quality before feature engineering.
@@ -337,29 +372,207 @@ def validate_input_data(df: pd.DataFrame) -> tuple[bool, list[str]]:
     
     return len(issues) == 0, issues
 
-def safe_pm_ratio(pm2_5: float, pm10: float) -> float:
-    """Calculate PM2.5/PM10 ratio with safe division."""
-    if pd.isna(pm2_5) or pd.isna(pm10) or pm10 == 0:
+def safe_calculation(operation: str, *values) -> float:
+    """
+    Unified safe calculation function for various operations.
+    
+    Args:
+        operation: Type of calculation ('pm_ratio', 'traffic_index')
+        *values: Values needed for the calculation
+    
+    Returns:
+        Calculated result or np.nan if inputs are invalid
+    """
+    # Check for any NaN values
+    if any(pd.isna(val) for val in values):
         return np.nan
-    return pm2_5 / pm10
+    
+    # Check for division by zero in ratio operations
+    if operation == 'pm_ratio' and (values[1] == 0 if len(values) > 1 else False):
+        return np.nan
+    
+    # Perform the appropriate calculation
+    if operation == 'pm_ratio':
+        return values[0] / values[1] if len(values) >= 2 else np.nan
+    elif operation == 'traffic_index':
+        return (values[0] * 0.6) + (values[1] * 0.4) if len(values) >= 2 else np.nan
 
-def safe_traffic_index(co: float, no2: float) -> float:
-    """Calculate traffic index with input validation."""
-    if pd.isna(co) or pd.isna(no2):
+    else:
         return np.nan
-    return (no2 * 0.6) + (co * 0.4)
 
-def safe_total_pm(pm2_5: float, pm10: float) -> float:
-    """Calculate total PM with input validation."""
-    if pd.isna(pm2_5) or pd.isna(pm10):
-        return np.nan
-    return pm2_5 + pm10
+def create_temporal_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Create temporal features for a DataFrame."""
+    df = df.copy()
+    
+    # Temporal features (safe as they only depend on datetime)
+    df['hour'] = df['datetime'].dt.hour.astype(np.int32)
+    df['day_of_week'] = df['datetime'].dt.dayofweek.astype(np.int32)
+    df['is_rush_hour'] = (
+        (df['hour'].isin([7, 8, 9])) | 
+        (df['hour'].isin([17, 18, 19, 20, 21, 22]))
+    ).astype(np.int64)
+    df['is_weekend'] = (df['datetime'].dt.weekday >= 5).astype(np.int64)
+    
+    month = df['datetime'].dt.month
+    df['season'] = np.select([
+        month.isin([12, 1, 2]),  # Winter
+        month.isin([3, 4, 5]),   # Spring  
+        month.isin([6, 7, 8]),   # Summer
+        month.isin([9, 10, 11])  # Monsoon
+    ], [0, 1, 2, 3], default=0).astype(np.int64)
+    
+    # Cyclical temporal encodings (safe)
+    df = create_cyclical_features(df, 'hour', 24)
+    df = create_cyclical_features(df, 'day_of_week', 7)
+    
+    return df
 
-def safe_pm_weighted(pm2_5: float, pm10: float) -> float:
-    """Calculate weighted PM with input validation."""
-    if pd.isna(pm2_5) or pd.isna(pm10):
-        return np.nan
-    return (pm2_5 * 0.7) + (pm10 * 0.3)
+def safe_process_gap_data(df: pd.DataFrame, gap_start: datetime, gap_end: datetime) -> pd.DataFrame:
+    """
+    Safely process gap data to prevent data leakage by ensuring temporal boundaries are respected.
+    
+    Args:
+        df: Raw dataframe with all fetched data (including historical buffer)
+        gap_start: Start of gap period
+        gap_end: End of gap period
+        
+    Returns:
+        DataFrame with gap data only, processed safely
+    """
+    print(f"🔒 Safely processing gap data from {gap_start} to {gap_end}")
+    
+    # Filter to only include data within the gap period (gap_end is exclusive)
+    gap_mask = (df['datetime'] >= gap_start) & (df['datetime'] < gap_end)
+    gap_df = df[gap_mask].copy()
+    
+    if gap_df.empty:
+        print("⚠️ No data found within gap period")
+        return gap_df
+    
+    # Get historical data before the gap for rolling calculations
+    historical_mask = (df['datetime'] < gap_start)
+    historical_df = df[historical_mask].copy()
+    
+    # Sort by datetime to ensure proper temporal order
+    gap_df = gap_df.sort_values('datetime').reset_index(drop=True)
+    
+    # Apply feature engineering with temporal safety
+    print("   📊 Calculating engineered features...")
+    gap_df['pm2_5_pm10_ratio'] = gap_df.apply(
+        lambda row: safe_calculation('pm_ratio', row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        axis=1
+    )
+    
+    gap_df['traffic_index'] = gap_df.apply(
+        lambda row: safe_calculation('traffic_index', row.get('no2_ppb'), row.get('co_ppm_8hr_avg')), 
+        axis=1
+    )
+    
+    gap_df['total_pm'] = gap_df.apply(
+        lambda row: safe_calculation('total_pm', row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        axis=1
+    )
+    
+
+    
+    # Temporal features (safe as they only depend on datetime)
+    print("   🕐 Calculating temporal features...")
+    gap_df = create_temporal_features(gap_df)
+    
+    # Safe lag features - use historical data when available
+    print("   ⏰ Calculating lag features safely...")
+    
+    # Get the last values from historical data for the first gap record
+    if len(historical_df) > 0:
+        last_historical = historical_df.iloc[-1]
+        
+        # Create pollutant lag features safely
+        gap_df['pm2_5_nowcast_lag_1h'] = gap_df['pm2_5_nowcast'].shift(1)
+        gap_df['pm10_nowcast_lag_1h'] = gap_df['pm10_nowcast'].shift(1)
+        gap_df['co_ppm_8hr_avg_lag_1h'] = gap_df['co_ppm_8hr_avg'].shift(1)
+        gap_df['no2_ppb_lag_1h'] = gap_df['no2_ppb'].shift(1)
+        
+        # Removed AQI lag features to prevent data leakage
+        # AQI is calculated from pollutants, so we can't reliably populate AQI lag features
+        # during real-time forecasting if pollutant measurements are delayed/unavailable
+        
+        # Fill the first gap record's lag values with historical data
+        gap_df.iloc[0, gap_df.columns.get_loc('pm2_5_nowcast_lag_1h')] = last_historical['pm2_5_nowcast']
+        gap_df.iloc[0, gap_df.columns.get_loc('pm10_nowcast_lag_1h')] = last_historical['pm10_nowcast']
+        gap_df.iloc[0, gap_df.columns.get_loc('co_ppm_8hr_avg_lag_1h')] = last_historical['co_ppm_8hr_avg']
+        gap_df.iloc[0, gap_df.columns.get_loc('no2_ppb_lag_1h')] = last_historical['no2_ppb']
+        # Removed AQI lag feature filling since we're not using AQI lag features anymore
+    else:
+        # No historical data available, use standard shift
+        gap_df['pm2_5_nowcast_lag_1h'] = gap_df['pm2_5_nowcast'].shift(1)
+        gap_df['pm10_nowcast_lag_1h'] = gap_df['pm10_nowcast'].shift(1)
+        gap_df['co_ppm_8hr_avg_lag_1h'] = gap_df['co_ppm_8hr_avg'].shift(1)
+        gap_df['no2_ppb_lag_1h'] = gap_df['no2_ppb'].shift(1)
+        
+        # Removed AQI lag features to prevent data leakage
+        # AQI is calculated from pollutants, so we can't reliably populate AQI lag features
+        # during real-time forecasting if pollutant measurements are delayed/unavailable
+    
+    # Safe rolling mean features - calculate using only historical data up to current timestamp
+    print("   📊 Calculating 6-hour rolling mean features safely...")
+    
+    # Initialize rolling mean columns
+    gap_df['pm2_5_nowcast_ma_6h'] = np.nan
+    gap_df['pm10_nowcast_ma_6h'] = np.nan
+    gap_df['no2_ppb_ma_6h'] = np.nan
+    
+    for idx in range(len(gap_df)):
+        current_time = gap_df.iloc[idx]['datetime']
+        
+        # Combine historical data before gap with gap data up to current time
+        historical_up_to_current = pd.concat([
+            historical_df[historical_df['datetime'] <= current_time],
+            gap_df[gap_df['datetime'] <= current_time]
+        ]).sort_values('datetime')
+        
+        # Calculate rolling means using only historical data up to current time
+        if len(historical_up_to_current) > 0:
+            pm2_5_recent = historical_up_to_current['pm2_5_nowcast'].tail(6)
+            gap_df.iloc[idx, gap_df.columns.get_loc('pm2_5_nowcast_ma_6h')] = pm2_5_recent.mean() if len(pm2_5_recent) > 0 else np.nan
+            
+            pm10_recent = historical_up_to_current['pm10_nowcast'].tail(6)
+            gap_df.iloc[idx, gap_df.columns.get_loc('pm10_nowcast_ma_6h')] = pm10_recent.mean() if len(pm10_recent) > 0 else np.nan
+            
+            no2_recent = historical_up_to_current['no2_ppb'].tail(6)
+            gap_df.iloc[idx, gap_df.columns.get_loc('no2_ppb_ma_6h')] = no2_recent.mean() if len(no2_recent) > 0 else np.nan
+    
+    # Add datetime_id
+    gap_df['datetime_id'] = gap_df['datetime'].astype('int64') // 10**9
+    
+    print(f"✅ Safely processed {len(gap_df)} gap records")
+    return gap_df
+
+def create_lag_features(df: pd.DataFrame, target_col: str, lags: list) -> pd.DataFrame:
+    """
+    Create lag features for a target column using proper time-based approach.
+    This function prevents data leakage by using shift() correctly.
+    
+    Args:
+        df: DataFrame with datetime index
+        target_col: Column to create lags for
+        lags: List of lag periods (in hours)
+    
+    Returns:
+        DataFrame with lag features added
+    """
+    df = df.copy()
+    
+    for lag in lags:
+        lag_col = f"{target_col}_lag_{lag}h"
+        df[lag_col] = df[target_col].shift(lag)
+        
+        # Fill NaN values created by lag (first few rows)
+        # Use forward fill first, then mean for any remaining NaNs
+        df[lag_col] = df[lag_col].fillna(method='ffill')
+        if df[lag_col].isna().any():
+            df[lag_col] = df[lag_col].fillna(df[target_col].mean())
+    
+    return df
 
 def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     """Apply all feature engineering steps with improved error handling."""
@@ -376,60 +589,90 @@ def apply_all_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     # Apply safe engineered features
     print("   📊 Calculating engineered features...")
     df['pm2_5_pm10_ratio'] = df.apply(
-        lambda row: safe_pm_ratio(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        lambda row: safe_calculation('pm_ratio', row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
         axis=1
     )
     
     df['traffic_index'] = df.apply(
-        lambda row: safe_traffic_index(row.get('co_ppm_8hr_avg'), row.get('no2_ppb')), 
+        lambda row: safe_calculation('traffic_index', row.get('no2_ppb'), row.get('co_ppm_8hr_avg')), 
         axis=1
     )
     
     df['total_pm'] = df.apply(
-        lambda row: safe_total_pm(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
+        lambda row: safe_calculation('total_pm', row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
         axis=1
     )
     
-    df['pm_weighted'] = df.apply(
-        lambda row: safe_pm_weighted(row.get('pm2_5_nowcast'), row.get('pm10_nowcast')), 
-        axis=1
-    )
+
     
     # Temporal features
     print("   🕐 Calculating temporal features...")
-    df['hour'] = df['datetime'].dt.hour.astype(np.int32)
-    df['is_rush_hour'] = (
-        (df['hour'].isin([7, 8, 9])) | 
-        (df['hour'].isin([17, 18, 19, 20, 21, 22]))
-    ).astype(np.int64)
-    df['is_weekend'] = (df['datetime'].dt.weekday >= 5).astype(np.int64)
+    df = create_temporal_features(df)
     
-    # Season (based on Karachi climate)
-    month = df['datetime'].dt.month
-    df['season'] = np.select([
-        month.isin([12, 1, 2]),  # Winter
-        month.isin([3, 4, 5]),   # Spring  
-        month.isin([6, 7, 8]),   # Summer
-        month.isin([9, 10, 11])  # Monsoon
-    ], [0, 1, 2, 3], default=0).astype(np.int64)
+    # Create lag features using proper time-based approach
+    print("   ⏰ Creating lag features for pollutant concentrations...")
+    df = create_lag_features(df, 'pm2_5_nowcast', [1])
+    df = create_lag_features(df, 'pm10_nowcast', [1])
+    df = create_lag_features(df, 'co_ppm_8hr_avg', [1])
+    df = create_lag_features(df, 'no2_ppb', [1])
     
-    # Lag features
-    print("   ⏰ Calculating lag features...")
-    df['pm2_5_nowcast_lag_1h'] = df['pm2_5_nowcast'].shift(1)
-    df['no2_ppb_lag_1h'] = df['no2_ppb'].shift(1)
+    # Removed AQI lag features to prevent data leakage
+    # AQI is calculated from pollutants, so using AQI lag features would require
+    # pollutant measurements to be available, which may not be the case in real-time
+    
+    # Rolling mean features (6-hour window)
+    print("   📊 Calculating 6-hour rolling mean features...")
+    df['pm2_5_nowcast_ma_6h'] = df['pm2_5_nowcast'].rolling(window=6, min_periods=1).mean()
+    df['pm10_nowcast_ma_6h'] = df['pm10_nowcast'].rolling(window=6, min_periods=1).mean()
+    df['no2_ppb_ma_6h'] = df['no2_ppb'].rolling(window=6, min_periods=1).mean()
     
     # Add datetime_id as Unix timestamp for online compatibility
     df['datetime_id'] = df['datetime'].astype('int64') // 10**9
     
     # Report feature engineering results
-    engineered_features = ['pm2_5_pm10_ratio', 'traffic_index', 'total_pm', 'pm_weighted', 'no2_ppb_lag_1h']
+    engineered_features = ['pm2_5_pm10_ratio', 'traffic_index']
+    cyclical_features = ['hour_sin', 'hour_cos', 'day_of_week_sin', 'day_of_week_cos']
+    lag_features = ['pm2_5_nowcast_lag_1h', 'pm10_nowcast_lag_1h', 'co_ppm_8hr_avg_lag_1h', 'no2_ppb_lag_1h']
+                   # Removed AQI lag features to prevent data leakage - AQI is calculated from pollutants
+    rolling_features = ['pm2_5_nowcast_ma_6h', 'pm10_nowcast_ma_6h', 'no2_ppb_ma_6h']
+    
     print("   📈 Feature engineering results:")
+    
+    # Engineered features
+    print("      📊 Engineered features:")
     for feature in engineered_features:
         if feature in df.columns:
             missing_count = df[feature].isnull().sum()
             total_count = len(df)
             valid_count = total_count - missing_count
-            print(f"      {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
+            print(f"         {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
+    
+    # Cyclical features
+    print("      🔄 Cyclical features:")
+    for feature in cyclical_features:
+        if feature in df.columns:
+            missing_count = df[feature].isnull().sum()
+            total_count = len(df)
+            valid_count = total_count - missing_count
+            print(f"         {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
+    
+    # Lag features
+    print("      ⏰ Lag features:")
+    for feature in lag_features:
+        if feature in df.columns:
+            missing_count = df[feature].isnull().sum()
+            total_count = len(df)
+            valid_count = total_count - missing_count
+            print(f"         {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
+    
+    # Rolling features
+    print("      📊 Rolling mean features:")
+    for feature in rolling_features:
+        if feature in df.columns:
+            missing_count = df[feature].isnull().sum()
+            total_count = len(df)
+            valid_count = total_count - missing_count
+            print(f"         {feature}: {valid_count}/{total_count} valid values ({missing_count} missing)")
     
     # Select only production features, handling missing columns gracefully
     feature_cols = list(PRODUCTION_FEATURES_SCHEMA.keys())
@@ -628,8 +871,8 @@ def fetch_and_process_gap_data(fs, gap_start: datetime, gap_end: datetime, gap_h
                             print(f"      ❌ Empty chunk data after {max_retries_per_chunk} retries")
                             break
                     
-                    # Apply feature engineering
-                    df_chunk_features = apply_all_feature_engineering(df_chunk)
+                    # Apply SAFE feature engineering for gap data
+                    df_chunk_features = safe_process_gap_data(df_chunk, current_start, current_end)
                     
                     # Filter to only the gap period (exclude the 16-hour buffer)
                     df_chunk_gap = df_chunk_features[
@@ -911,30 +1154,73 @@ def create_or_get_feature_group(fs, df_sample: pd.DataFrame, force_new_version: 
         return None
 
 def upload_to_hopsworks(df: pd.DataFrame, fs) -> bool:
-    """Upload data to Hopsworks feature group using the simple, working approach from enhanced pipeline."""
+    """Upload data to Hopsworks feature group with batch processing for large datasets."""
     try:
         print(f"📤 Uploading {len(df)} records to Hopsworks...")
         
-        # Get or create feature group using the simple approach
+        # Get or create feature group
         fg = create_or_get_feature_group(fs, df)
         
         if fg is None:
             print("❌ Failed to get or create feature group")
             return False
         
-        # Ensure datetime is timezone-aware (keep this from unified pipeline)
+        # Ensure datetime is timezone-aware
         if df['datetime'].dt.tz is None:
             df['datetime'] = df['datetime'].dt.tz_localize(PKT)
         
-        # Use the simple insert approach from enhanced pipeline
-        fg.insert(df, write_options={"wait_for_job": True})
+        # For large datasets, upload in batches to avoid Kafka timeout
+        batch_size = 1000  # Smaller batch size to avoid timeout
+        total_records = len(df)
+        successful_batches = 0
+        failed_batches = 0
         
-        print(f"✅ Successfully uploaded {len(df)} records to Hopsworks")
-        print(f"   📊 Feature Group: {FEATURE_GROUP_NAME}")
-        print(f"   📈 Features: {len(df.columns) - 1}")  # Exclude datetime
-        print(f"   📅 Time Range: {df['datetime'].min()} to {df['datetime'].max()}")
+        if total_records <= batch_size:
+            # Small dataset - upload directly
+            print(f"📤 Uploading {total_records} records directly...")
+            fg.insert(df, write_options={"wait_for_job": True})
+            successful_batches = 1
+        else:
+            # Large dataset - upload in batches
+            print(f"📤 Uploading {total_records} records in batches of {batch_size}...")
+            
+            for i in range(0, total_records, batch_size):
+                batch_end = min(i + batch_size, total_records)
+                batch_df = df.iloc[i:batch_end].copy()
+                
+                print(f"   📦 Batch {i//batch_size + 1}: records {i+1}-{batch_end}")
+                
+                # Add delay between batches to avoid overwhelming Kafka
+                if i > 0:
+                    time.sleep(2)
+                
+                try:
+                    fg.insert(batch_df, write_options={"wait_for_job": True})
+                    print(f"   ✅ Batch {i//batch_size + 1} uploaded successfully")
+                    successful_batches += 1
+                except Exception as batch_error:
+                    print(f"   ❌ Batch {i//batch_size + 1} failed: {str(batch_error)}")
+                    failed_batches += 1
+                    # Continue with next batch but track the failure
+                    continue
+            
+            print(f"📊 Batch upload summary: {successful_batches} successful, {failed_batches} failed")
+            
+            # If all batches failed, return failure
+            if successful_batches == 0:
+                print("❌ All batches failed - upload unsuccessful")
+                return False
         
-        return True
+        # Only show success if we actually uploaded data
+        if successful_batches > 0:
+            print(f"✅ Successfully uploaded {len(df)} records to Hopsworks")
+            print(f"   📊 Feature Group: {FEATURE_GROUP_NAME}")
+            print(f"   📈 Features: {len(df.columns) - 1}")  # Exclude datetime
+            print(f"   📅 Time Range: {df['datetime'].min()} to {df['datetime'].max()}")
+            return True
+        else:
+            print("❌ No data was successfully uploaded to Hopsworks")
+            return False
         
     except Exception as e:
         print(f"❌ Failed to upload to Hopsworks: {str(e)}")
@@ -1022,7 +1308,7 @@ def backfill_pipeline(force: bool = False) -> bool:
         
         # Set date range for 12 months
         end_date = datetime.now(timezone.utc)
-        start_date = end_date - relativedelta(months=12)
+        start_date = end_date - relativedelta(months=13)
         
         print(f"📅 Fetching data from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
         

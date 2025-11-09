@@ -1,0 +1,21 @@
+AQI PREDICTION MODELS - COMPREHENSIVE COMPARISON REPORT
+================================================================================
+
+Performance Metrics Summary:
+--------------------------------------------------
+       Model    MAE   RMSE     R2   MAPE  Explained_Variance
+RandomForest 0.6051 1.3522 0.9992 0.0245                 NaN
+    LightGBM 1.2796 2.2044 0.9979 0.0436                 NaN
+     XGBoost 0.9451 1.9803 0.9983 0.0396                 NaN
+
+Best Models by Metric:
+------------------------------
+Best MAE:  RandomForest (0.6051)
+Best RMSE: RandomForest (1.3522)
+Best R²:   RandomForest (0.9992)
+Best MAPE: RandomForest (0.0245)
+
+Overall Best Model: RandomForest (Score: 1.0000)
+
+3-Day AQI Forecasts Comparison:
+----------------------------------------
