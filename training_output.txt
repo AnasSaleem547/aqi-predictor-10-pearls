@@ -1,39 +1,34 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2025-11-10 02:03:59 PKT
+🕐 Pipeline started at: 2025-11-11 02:03:03 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2025-11-10 02:04:02 PKT
+⏰ Started at: 2025-11-11 02:03:08 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/11_10_2025_0204_pkt
+📁 Output directory: randomforest_additional/11_11_2025_0203_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-10 02:04:02,237 INFO: Initializing external client
-2025-11-10 02:04:02,238 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-10 02:04:03,429 INFO: Python Engine initialized.
+2025-11-11 02:03:08,190 INFO: Initializing external client
+2025-11-11 02:03:08,190 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-11 02:03:09,156 INFO: Python Engine initialized.
 Traceback (most recent call last):
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 863, in main
-    splits, df_sorted = create_time_series_splits(df_processed)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 428, in create_time_series_splits
-    for train_index, test_index in tscv.split(df_sorted):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
-    raise ValueError(
-ValueError: Cannot have number of folds=6 greater than the number of samples=2.
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 866, in main
+    raise ValueError("❌ No valid time series splits created")
+ValueError: ❌ No valid time series splits created
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 3
-📥 Retrieving features from: karachifeatures10 (v3)
+✅ Latest version of karachifeatures10: 5
+📥 Retrieving features from: karachifeatures10 (v5)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.50s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.53s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 2 records
-📊 Shape: (2, 25)
+✅ Successfully retrieved 19 records
+📊 Shape: (19, 25)
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -44,49 +39,51 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 2 records
+   ✅ After preprocessing: 19 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
+⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 7 samples
+⚠️ Skipping split - insufficient training data: 10 samples
+⚠️ Skipping split - insufficient training data: 13 samples
+⚠️ Skipping split - insufficient training data: 16 samples
+✅ Created 0 time series splits
 
-❌ Error in training pipeline: Cannot have number of folds=6 greater than the number of samples=2.
+❌ Error in training pipeline: ❌ No valid time series splits created
 
 ✅ RandomForest training completed successfully!
    Result: (None, None, None)
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2025-11-10 02:04:07 PKT
+⏰ Started at: 2025-11-11 02:03:14 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-10 02:04:07,821 INFO: Closing external client and cleaning up certificates.
+2025-11-11 02:03:14,995 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-11-10 02:04:07,823 INFO: Initializing external client
-2025-11-10 02:04:07,823 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-10 02:04:08,963 INFO: Python Engine initialized.
+2025-11-11 02:03:14,997 INFO: Initializing external client
+2025-11-11 02:03:14,998 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-11 02:03:15,735 INFO: Python Engine initialized.
 Traceback (most recent call last):
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 817, in main
-    splits, df_sorted = create_time_series_splits(df_processed)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 365, in create_time_series_splits
-    for train_index, test_index in tscv.split(df_sorted):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
-    raise ValueError(
-ValueError: Cannot have number of folds=6 greater than the number of samples=2.
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 872, in main
+    print(f"\n🏆 Best model from split {best_split + 1} with RMSE: {best_score:.4f}")
+                                        ^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'best_split' where it is not associated with a value
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 3
-📥 Retrieving features from: karachifeatures10 (v3)
+✅ Latest version of karachifeatures10: 5
+📥 Retrieving features from: karachifeatures10 (v5)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.48s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.56s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 2 records
-📊 Shape: (2, 25)
+✅ Successfully retrieved 19 records
+📊 Shape: (19, 25)
 🔧 Preprocessing data...
    🧹 Handling missing values...
    📊 Ensuring engineered features are properly calculated...
@@ -95,51 +92,52 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 2 records
-📊 Final dataset shape: (2, 22)
-🎯 Target variable range: 80.0 - 80.0
+   ✅ After preprocessing: 19 records
+📊 Final dataset shape: (19, 22)
+🎯 Target variable range: 65.0 - 78.0
 📊 Creating time series splits...
-❌ Pipeline failed: Cannot have number of folds=6 greater than the number of samples=2.
+⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 7 samples
+⚠️ Skipping split - insufficient training data: 10 samples
+⚠️ Skipping split - insufficient training data: 13 samples
+⚠️ Skipping split - insufficient training data: 16 samples
+✅ Created 0 time series splits
+❌ Pipeline failed: cannot access local variable 'best_split' where it is not associated with a value
 
 ✅ LightGBM training completed successfully!
    Result: None
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2025-11-10 02:04:13 PKT
+⏰ Started at: 2025-11-11 02:03:20 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/11_10_2025_0204_pkt
+📁 Output directory: xgboost_additional/11_11_2025_0203_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-10 02:04:13,692 INFO: Closing external client and cleaning up certificates.
+2025-11-11 02:03:20,496 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-11-10 02:04:13,693 INFO: Initializing external client
-2025-11-10 02:04:13,694 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-10 02:04:14,754 INFO: Python Engine initialized.
+2025-11-11 02:03:20,498 INFO: Initializing external client
+2025-11-11 02:03:20,498 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-11 02:03:21,070 INFO: Python Engine initialized.
 Traceback (most recent call last):
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 816, in main
-    splits, df_sorted = create_time_series_splits(df_processed)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 364, in create_time_series_splits
-    for train_index, test_index in tscv.split(df_sorted):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1289, in _split
-    raise ValueError(
-ValueError: Cannot have number of folds=6 greater than the number of samples=2.
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 819, in main
+    raise ValueError("❌ No valid time series splits created")
+ValueError: ❌ No valid time series splits created
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 3
-📥 Retrieving features from: karachifeatures10 (v3)
+✅ Latest version of karachifeatures10: 5
+📥 Retrieving features from: karachifeatures10 (v5)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.70s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.39s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 2 records
-📊 Shape: (2, 25)
+✅ Successfully retrieved 19 records
+📊 Shape: (19, 25)
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -150,12 +148,18 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 2 records
+   ✅ After preprocessing: 19 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
+⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 7 samples
+⚠️ Skipping split - insufficient training data: 10 samples
+⚠️ Skipping split - insufficient training data: 13 samples
+⚠️ Skipping split - insufficient training data: 16 samples
+✅ Created 0 time series splits
 
-❌ Error in training pipeline: Cannot have number of folds=6 greater than the number of samples=2.
+❌ Error in training pipeline: ❌ No valid time series splits created
 
 ✅ XGBoost training completed successfully!
    Result: (None, None, None)
@@ -163,12 +167,12 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2025-11-10 02:04:20 PKT
+⏰ Completed at: 2025-11-11 02:03:25 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2025-11-10 02:04:20,009 INFO: Closing external client and cleaning up certificates.
+2025-11-11 02:03:25,251 INFO: Closing external client and cleaning up certificates.
 Connection closed.
