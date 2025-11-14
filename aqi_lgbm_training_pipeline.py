@@ -18,6 +18,8 @@ import os
 import sys
 import warnings
 warnings.filterwarnings('ignore')
+import matplotlib
+matplotlib.use("Agg")
 
 import pandas as pd
 import numpy as np

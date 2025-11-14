@@ -879,6 +879,11 @@ def fetch_and_process_gap_data(fs, gap_start: datetime, gap_end: datetime, gap_h
                         (df_chunk_features['datetime'] >= current_start) & 
                         (df_chunk_features['datetime'] < current_end)
                     ].copy()
+                    feature_cols = list(PRODUCTION_FEATURES_SCHEMA.keys())
+                    for col in feature_cols:
+                        if col not in df_chunk_gap.columns:
+                            df_chunk_gap[col] = np.nan
+                    df_chunk_gap = df_chunk_gap[feature_cols]
                     
                     if not df_chunk_gap.empty:
                         all_gap_data.append(df_chunk_gap)
@@ -1157,7 +1162,12 @@ def upload_to_hopsworks(df: pd.DataFrame, fs) -> bool:
     """Upload data to Hopsworks feature group with batch processing for large datasets."""
     try:
         print(f"📤 Uploading {len(df)} records to Hopsworks...")
-        
+        feature_cols = list(PRODUCTION_FEATURES_SCHEMA.keys())
+        for col in feature_cols:
+            if col not in df.columns:
+                df[col] = np.nan
+        df = df[feature_cols]
+
         # Get or create feature group
         fg = create_or_get_feature_group(fs, df)
         
