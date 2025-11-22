@@ -1,20 +1,20 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2025-11-13 02:03:21 PKT
+🕐 Pipeline started at: 2025-11-14 02:09:56 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2025-11-13 02:03:24 PKT
+⏰ Started at: 2025-11-14 02:10:00 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/11_13_2025_0203_pkt
+📁 Output directory: randomforest_additional/11_14_2025_0210_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-13 02:03:24,971 INFO: Initializing external client
-2025-11-13 02:03:24,971 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-13 02:03:26,124 INFO: Python Engine initialized.
+2025-11-14 02:10:00,501 INFO: Initializing external client
+2025-11-14 02:10:00,501 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-14 02:10:01,657 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 866, in main
     raise ValueError("❌ No valid time series splits created")
@@ -22,10 +22,10 @@ ValueError: ❌ No valid time series splits created
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 9
-📥 Retrieving features from: karachifeatures10 (v9)
+✅ Latest version of karachifeatures10: 11
+📥 Retrieving features from: karachifeatures10 (v11)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.91s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.52s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 19 records
 📊 Shape: (19, 25)
@@ -57,18 +57,18 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2025-11-13 02:03:33 PKT
+⏰ Started at: 2025-11-14 02:10:07 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-13 02:03:33,565 INFO: Closing external client and cleaning up certificates.
+2025-11-14 02:10:07,142 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-11-13 02:03:33,567 INFO: Initializing external client
-2025-11-13 02:03:33,568 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-13 02:03:34,406 INFO: Python Engine initialized.
+2025-11-14 02:10:07,144 INFO: Initializing external client
+2025-11-14 02:10:07,144 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-14 02:10:08,244 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 872, in main
     print(f"\n🏆 Best model from split {best_split + 1} with RMSE: {best_score:.4f}")
@@ -77,10 +77,10 @@ UnboundLocalError: cannot access local variable 'best_split' where it is not ass
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 9
-📥 Retrieving features from: karachifeatures10 (v9)
+✅ Latest version of karachifeatures10: 11
+📥 Retrieving features from: karachifeatures10 (v11)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.70s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.65s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 19 records
 📊 Shape: (19, 25)
@@ -94,7 +94,7 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for no2_ppb...
    ✅ After preprocessing: 19 records
 📊 Final dataset shape: (19, 22)
-🎯 Target variable range: 61.0 - 64.0
+🎯 Target variable range: 66.0 - 84.0
 📊 Creating time series splits...
 ⚠️ Skipping split - insufficient training data: 4 samples
 ⚠️ Skipping split - insufficient training data: 7 samples
@@ -109,21 +109,21 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2025-11-13 02:03:41 PKT
+⏰ Started at: 2025-11-14 02:10:14 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/11_13_2025_0203_pkt
+📁 Output directory: xgboost_additional/11_14_2025_0210_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-11-13 02:03:41,759 INFO: Closing external client and cleaning up certificates.
+2025-11-14 02:10:14,129 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-11-13 02:03:41,761 INFO: Initializing external client
-2025-11-13 02:03:41,762 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-11-13 02:03:42,753 INFO: Python Engine initialized.
+2025-11-14 02:10:14,131 INFO: Initializing external client
+2025-11-14 02:10:14,132 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-11-14 02:10:15,086 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 819, in main
     raise ValueError("❌ No valid time series splits created")
@@ -131,8 +131,8 @@ ValueError: ❌ No valid time series splits created
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 9
-📥 Retrieving features from: karachifeatures10 (v9)
+✅ Latest version of karachifeatures10: 11
+📥 Retrieving features from: karachifeatures10 (v11)
 📋 Retrieving all records...
 Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.44s) 
 🔄 Sorting data by datetime for chronological order...
@@ -167,12 +167,12 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Finished
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2025-11-13 02:03:49 PKT
+⏰ Completed at: 2025-11-14 02:10:20 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2025-11-13 02:03:49,432 INFO: Closing external client and cleaning up certificates.
+2025-11-14 02:10:20,151 INFO: Closing external client and cleaning up certificates.
 Connection closed.
