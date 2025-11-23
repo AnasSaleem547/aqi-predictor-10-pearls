@@ -32,12 +32,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
-          pip install "hopsworks[python]"
+          pip install "hopsworks[python]==4.2.*"
 
       - name: Set timezone to Pakistan
         run: |
           sudo timedatectl set-timezone Asia/Karachi
           date
+
+      - name: Populate training data
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+        run: |
+          python unified_aqi_hopsworks_pipeline.py hourly --max-gap-hours 720
 
       - name: Run model retraining
         env:
@@ -47,6 +55,12 @@ jobs:
         run: |
           echo "🚀 Starting daily model retraining..."
           python unified_model_training.py 2>&1 | tee training_output.txt
+
+      - name: List produced artifacts
+        run: |
+          ls -R lgbm_additional || true
+          ls -R xgboost_additional || true
+          ls -R randomforest_additional || true
 
       - name: Check for new model files
         run: |

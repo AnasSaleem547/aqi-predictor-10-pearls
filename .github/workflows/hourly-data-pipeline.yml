@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Hopsworks Kafka support
         run: |
-          pip install "hopsworks[python]"
+          pip install "hopsworks[python]==4.2.*"
 
       - name: Set timezone to Pakistan
         run: |
