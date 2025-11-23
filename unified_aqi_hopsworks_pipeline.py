@@ -80,6 +80,7 @@ FEATURE_GROUP_NAME = "karachifeatures10"
 MISSING_DATA_THRESHOLD = 0.30  # 30% missing data tolerance
 API_RETRY_ATTEMPTS = 3
 API_RETRY_DELAY = 5  # seconds
+MAX_GAP_HOURS_TO_FILL = 720
 
 # ============================================================
 # EPA AQI Breakpoints (Same as original)
@@ -1318,7 +1319,7 @@ def backfill_pipeline(force: bool = False) -> bool:
         
         # Set date range for 12 months
         end_date = datetime.now(timezone.utc)
-        start_date = end_date - relativedelta(months=13)
+        start_date = end_date - relativedelta(months=15)
         
         print(f"📅 Fetching data from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
         
@@ -1421,32 +1422,32 @@ def hourly_pipeline() -> bool:
         if gap_hours > 0:
             print(f"🔧 Step 2: Filling {gap_hours} missing hours...")
             
-            # Only fill gaps if they're reasonable (not more than 7 days = 168 hours)
-            if gap_hours > 168:
-                print(f"⚠️ Gap too large ({gap_hours} hours > 168 hours). Consider running backfill instead.")
-                print("💡 Proceeding with normal hourly update for current hour only.")
-                gap_hours = 0  # Skip gap filling
-            else:
-                gap_data = fetch_and_process_gap_data(fs, gap_start, gap_end, gap_hours)
-                
-                if gap_data is not None and not gap_data.empty:
-                    # Validate gap data quality
-                    is_valid, message = validate_data_quality(gap_data)
-                    if is_valid:
-                        # Upload gap data
-                        gap_success = upload_to_hopsworks(gap_data, fs)
-                        if gap_success:
-                            print(f"✅ Successfully filled {len(gap_data)} missing records")
-                            print(f"   📅 Gap filled from: {gap_data['datetime'].min()}")
-                            print(f"   📅 Gap filled to: {gap_data['datetime'].max()}")
-                        else:
-                            print("❌ Failed to upload gap data")
-                            return False
+            gap_fill_end = gap_end
+            gap_fill_start = max(gap_end - timedelta(hours=MAX_GAP_HOURS_TO_FILL), gap_start)
+            gap_fill_hours = int((gap_fill_end - gap_fill_start).total_seconds() / 3600)
+            
+            print(f"   📅 Gap fill window: {gap_fill_start} → {gap_fill_end} ({gap_fill_hours}h, max {MAX_GAP_HOURS_TO_FILL}h)")
+            
+            gap_data = fetch_and_process_gap_data(fs, gap_fill_start, gap_fill_end, gap_fill_hours)
+            
+            if gap_data is not None and not gap_data.empty:
+                # Validate gap data quality
+                is_valid, message = validate_data_quality(gap_data)
+                if is_valid:
+                    # Upload gap data
+                    gap_success = upload_to_hopsworks(gap_data, fs)
+                    if gap_success:
+                        print(f"✅ Successfully filled {len(gap_data)} missing records")
+                        print(f"   📅 Gap filled from: {gap_data['datetime'].min()}")
+                        print(f"   📅 Gap filled to: {gap_data['datetime'].max()}")
                     else:
-                        print(f"❌ Gap data quality validation failed: {message}")
+                        print("❌ Failed to upload gap data")
                         return False
                 else:
-                    print("⚠️ Could not fetch gap data, proceeding with current hour only")
+                    print(f"❌ Gap data quality validation failed: {message}")
+                    return False
+            else:
+                print("⚠️ Could not fetch gap data, proceeding with current hour only")
         else:
             print("✅ No gaps detected, proceeding with current hour update")
         
