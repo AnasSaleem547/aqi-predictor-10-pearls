@@ -26,6 +26,13 @@ import glob
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+BASE_PATH = Path(__file__).resolve().parent
+def _parse_dir_ts(name):
+    try:
+        parts = name.split('_')
+        return datetime.strptime(f"{parts[2]}-{parts[0]}-{parts[1]} {parts[3][:2]}:{parts[3][2:]}", "%Y-%m-%d %H:%M")
+    except Exception:
+        return None
 
 # ============================================================
 # EPA AQI Configuration
@@ -51,51 +58,40 @@ def get_aqi_level(aqi_value):
 # Utility Functions
 # ============================================================
 def find_latest_model_results():
-    """Find the most recent model training results for each model type."""
     model_results = {}
-    
-    # Define model directories
     model_dirs = {
-        'Random Forest': 'randomforest_additional',
-        'LightGBM': 'lgbm_additional', 
-        'XGBoost': 'xgboost_additional'
+        'Random Forest': BASE_PATH / 'randomforest_additional',
+        'LightGBM': BASE_PATH / 'lgbm_additional',
+        'XGBoost': BASE_PATH / 'xgboost_additional'
     }
-    
+    def parse_ts(name):
+        try:
+            parts = name.split('_')
+            ts = f"{parts[2]}-{parts[0]}-{parts[1]} {parts[3][:2]}:{parts[3][2:]}:00"
+            return datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+        except Exception:
+            return datetime.min
     for model_name, base_dir in model_dirs.items():
-        if os.path.exists(base_dir):
-            # Find all timestamped subdirectories
-            subdirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
+        if base_dir.exists():
+            subdirs = [d.name for d in base_dir.iterdir() if d.is_dir()]
             if subdirs:
-                # Sort directories by timestamp (newest first)
-                sorted_dirs = sorted(subdirs, reverse=True)
-                
-                # Find the most recent directory that has valid data files
+                sorted_dirs = sorted(subdirs, key=parse_ts, reverse=True)
                 latest_valid_dir = None
                 for dir_name in sorted_dirs:
-                    results_path = os.path.join(base_dir, dir_name)
-                    
-                    # Check for required files
-                    metrics_file = os.path.join(results_path, 'model_metrics.json')
-                    forecast_file = os.path.join(results_path, 'aqi_3_day_forecast.csv')
-                    
-                    # Check if both files exist and are not empty
-                    if (os.path.exists(metrics_file) and os.path.exists(forecast_file) and
-                        os.path.getsize(metrics_file) > 0 and os.path.getsize(forecast_file) > 0):
+                    results_path = base_dir / dir_name
+                    metrics_file = results_path / 'model_metrics.json'
+                    forecast_file = results_path / 'aqi_3_day_forecast.csv'
+                    if metrics_file.exists() and forecast_file.exists() and metrics_file.stat().st_size > 0 and forecast_file.stat().st_size > 0:
                         latest_valid_dir = dir_name
                         break
-                
                 if latest_valid_dir:
-                    results_path = os.path.join(base_dir, latest_valid_dir)
-                    metrics_file = os.path.join(results_path, 'model_metrics.json')
-                    forecast_file = os.path.join(results_path, 'aqi_3_day_forecast.csv')
-                    
+                    results_path = base_dir / latest_valid_dir
                     model_results[model_name] = {
-                        'results_path': results_path,
-                        'metrics_file': metrics_file,
-                        'forecast_file': forecast_file,
+                        'results_path': str(results_path),
+                        'metrics_file': str(results_path / 'model_metrics.json'),
+                        'forecast_file': str(results_path / 'aqi_3_day_forecast.csv'),
                         'timestamp': latest_valid_dir
                     }
-    
     return model_results
 
 def load_model_metrics(metrics_file):
@@ -175,35 +171,21 @@ def create_aqi_gauge(aqi_value, title="Current AQI"):
         xref="paper", yref="paper",
         x=0.5, y=-0.15,
         showarrow=False,
-        font=dict(size=14, color=color)
+        font=dict(size=14, color="#333333")
     )
     
     fig.update_layout(height=400)
     return fig
 
 def load_historical_data():
-    """Load ALL historical AQI data from the most recent retrieved file."""
     try:
-        # Find the most recent retrieved historical data file
-        import glob
-        import os
-        
-        historical_files = glob.glob('retrieved_karachi_aqi_features_*.csv')
+        historical_files = glob.glob(str(BASE_PATH / 'retrieved_karachi_aqi_features*.csv'))
         if not historical_files:
             return None
-        
-        # Get the most recent file based on timestamp in filename
         latest_file = max(historical_files, key=os.path.getctime)
-        
-        # Load the complete historical data
         df = pd.read_csv(latest_file)
-        
-        # Convert datetime column
         df['datetime'] = pd.to_datetime(df['datetime'])
-        
-        # Return ALL historical data (no filtering)
         return df
-        
     except Exception as e:
         print(f"Warning: Could not load historical data: {e}")
         return None
@@ -344,17 +326,16 @@ def main():
             default=['Random Forest', 'LightGBM', 'XGBoost']
         )
         
-        # Auto-refresh option
         auto_refresh = st.checkbox("Enable Auto-refresh (5 min)", value=False)
         if auto_refresh:
-            st_autorefresh = st.empty()
-            st_autorefresh.text(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            st.write(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         # EPA AQI Legend
         st.header("🎨 EPA AQI Levels")
         for level, info in EPA_AQI_LEVELS.items():
+            text_color = "#000000" if level in ["Good", "Moderate", "Unhealthy for Sensitive Groups"] else "#FFFFFF"
             st.markdown(
-                f"<div style='background-color: {info['color']}; padding: 8px; margin: 2px; border-radius: 4px; color: white; font-weight: bold;'>",
+                f"<div style='background-color: {info['color']}; padding: 8px; margin: 2px; border-radius: 4px; color: {text_color}; font-weight: bold;'>",
                 unsafe_allow_html=True
             )
             st.markdown(
@@ -386,8 +367,16 @@ def main():
         st.metric("Models Available", len(available_models))
     
     with col2:
-        latest_timestamp = max([info['timestamp'] for info in available_models.values()])
-        st.metric("Last Training", latest_timestamp)
+        ts_list = []
+        for info in available_models.values():
+            dt = _parse_dir_ts(info['timestamp'])
+            if dt:
+                ts_list.append(dt)
+        if ts_list:
+            latest_dt = max(ts_list)
+            st.metric("Last Training (PKT)", latest_dt.strftime("%Y-%m-%d %H:%M"))
+        else:
+            st.metric("Last Training (PKT)", "Unknown")
     
     with col3:
         st.metric("Forecast Period", "3 Days")
@@ -494,9 +483,7 @@ def main():
                 st.markdown(f"AQI: **{pred['AQI']:.1f}**")
                 st.markdown(f"Level: **{level}**")
                 
-                # Show correction indicator if Random Forest was corrected
-                if pred.get('Corrected', False):
-                    st.markdown("<small style='color: #ff6b6b;'>⚠️ Forecast bias corrected</small>", unsafe_allow_html=True)
+                pass
     
     st.markdown("---")
     
@@ -504,63 +491,114 @@ def main():
     st.header("📅 3-Day AQI Forecasts")
     
     forecast_tabs = st.tabs(list(available_models.keys()))
-    
+
     for i, (model_name, model_info) in enumerate(available_models.items()):
         with forecast_tabs[i]:
             forecast_df = load_forecasts(model_info['forecast_file'])
-            
-            # Validate Random Forest forecasts for bias
             if model_name == 'Random Forest' and forecast_df is not None and not forecast_df.empty:
                 if reference_mean is not None:
                     forecast_df = validate_random_forest_forecast(forecast_df, reference_mean, threshold=1.5)
-            
+
             if forecast_df is not None and not forecast_df.empty:
-                # Create forecast chart with historical context
-                fig = create_forecast_chart(forecast_df, model_name, historical_df)
-                if fig:
-                    st.plotly_chart(fig, use_container_width=True)
-                
-                # Display forecast table with AQI levels
-                st.subheader("Forecast Details")
-                
-                # Prepare table data
-                table_data = []
                 aqi_col = None
                 for col in ['AQI', 'aqi', 'predicted_aqi', 'prediction', 'aqi_forecast']:
                     if col in forecast_df.columns:
                         aqi_col = col
                         break
-                
+
+                hourly_df = None
+                daily_df = None
                 if aqi_col:
-                    for _, row in forecast_df.iterrows():
-                        aqi_val = row[aqi_col]
-                        level, color, description = get_aqi_level(aqi_val)
-                        
-                        table_data.append({
-                            'Date': row['datetime'].strftime('%Y-%m-%d %H:%M'),
-                            'AQI': f"{aqi_val:.1f}",
-                            'Level': level,
-                            'Color': color
-                        })
-                    
-                    forecast_table = pd.DataFrame(table_data)
-                    
-                    # Display styled table
-                    def color_level(val):
-                        # Map level names to colors
-                        level_colors = {
-                            'Good': '#00E400',
-                            'Moderate': '#FFFF00', 
-                            'Unhealthy for Sensitive Groups': '#FF7E00',
-                            'Unhealthy': '#FF0000',
-                            'Very Unhealthy': '#8F3F97',
-                            'Hazardous': '#7E0023',
-                            'Very Hazardous': '#8B4513'
-                        }
-                        return f'background-color: {level_colors.get(val, "#808080")}; color: white'
-                    
-                    styled_df = forecast_table.style.applymap(color_level, subset=['Level'])
-                    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+                    sorted_df = forecast_df.sort_values('datetime')
+                    hourly_df = sorted_df.head(72)
+                    daily_df = sorted_df[['datetime', aqi_col]].copy()
+                    daily_df['datetime'] = daily_df['datetime'].dt.normalize()
+                    daily_df = daily_df.groupby('datetime', as_index=False)[aqi_col].mean()
+
+                st.subheader("Forecast Tables")
+                table_tabs = st.tabs(["Hourly (72)", "Daily Avg"])
+
+                with table_tabs[0]:
+                    if aqi_col and hourly_df is not None:
+                        table_data = []
+                        for _, row in hourly_df.iterrows():
+                            aqi_val = row[aqi_col]
+                            level, color, description = get_aqi_level(aqi_val)
+                            table_data.append({
+                                'Date': row['datetime'].strftime('%Y-%m-%d %H:%M'),
+                                'AQI': f"{aqi_val:.1f}",
+                                'Level': level
+                            })
+                        hourly_table = pd.DataFrame(table_data)
+                        def color_level(val):
+                            level_colors = {
+                                'Good': '#00E400',
+                                'Moderate': '#FFFF00',
+                                'Unhealthy for Sensitive Groups': '#FF7E00',
+                                'Unhealthy': '#FF0000',
+                                'Very Unhealthy': '#8F3F97',
+                                'Hazardous': '#7E0023',
+                                'Very Hazardous': '#8B4513'
+                            }
+                            text_colors = {
+                                'Good': '#000000',
+                                'Moderate': '#000000',
+                                'Unhealthy for Sensitive Groups': '#000000',
+                                'Unhealthy': '#FFFFFF',
+                                'Very Unhealthy': '#FFFFFF',
+                                'Hazardous': '#FFFFFF',
+                                'Very Hazardous': '#FFFFFF'
+                            }
+                            return f"background-color: {level_colors.get(val, '#808080')}; color: {text_colors.get(val, '#FFFFFF')}"
+                        styled_hourly = hourly_table.style.applymap(color_level, subset=['Level'])
+                        st.dataframe(styled_hourly, use_container_width=True, hide_index=True)
+
+                with table_tabs[1]:
+                    if daily_df is not None:
+                        table_data = []
+                        for _, row in daily_df.iterrows():
+                            aqi_val = row[aqi_col]
+                            level, color, description = get_aqi_level(aqi_val)
+                            table_data.append({
+                                'Date': row['datetime'].strftime('%Y-%m-%d'),
+                                'AQI Avg': f"{aqi_val:.1f}",
+                                'Level': level
+                            })
+                        daily_table = pd.DataFrame(table_data)
+                        def color_level_daily(val):
+                            level_colors = {
+                                'Good': '#00E400',
+                                'Moderate': '#FFFF00',
+                                'Unhealthy for Sensitive Groups': '#FF7E00',
+                                'Unhealthy': '#FF0000',
+                                'Very Unhealthy': '#8F3F97',
+                                'Hazardous': '#7E0023',
+                                'Very Hazardous': '#8B4513'
+                            }
+                            text_colors = {
+                                'Good': '#000000',
+                                'Moderate': '#000000',
+                                'Unhealthy for Sensitive Groups': '#000000',
+                                'Unhealthy': '#FFFFFF',
+                                'Very Unhealthy': '#FFFFFF',
+                                'Hazardous': '#FFFFFF',
+                                'Very Hazardous': '#FFFFFF'
+                            }
+                            return f"background-color: {level_colors.get(val, '#808080')}; color: {text_colors.get(val, '#FFFFFF')}"
+                        styled_daily = daily_table.style.applymap(color_level_daily, subset=['Level'])
+                        st.dataframe(styled_daily, use_container_width=True, hide_index=True)
+
+                st.subheader("Forecast Charts")
+                graph_tabs = st.tabs(["Hourly (72)", "Daily Avg"])
+                with graph_tabs[0]:
+                    fig_hourly = create_forecast_chart(hourly_df if hourly_df is not None else forecast_df, model_name, historical_df)
+                    if fig_hourly:
+                        st.plotly_chart(fig_hourly, use_column_width=True)
+                with graph_tabs[1]:
+                    if daily_df is not None:
+                        fig_daily = create_forecast_chart(daily_df, f"{model_name} Daily Avg", None)
+                        if fig_daily:
+                            st.plotly_chart(fig_daily, use_column_width=True)
             else:
                 st.warning(f"No forecast data available for {model_name}")
     
@@ -573,6 +611,11 @@ def main():
         <p>Data Source: OpenWeather API | Models: Random Forest, LightGBM, XGBoost</p>
         </div>
     """.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), unsafe_allow_html=True)
+
+    if auto_refresh:
+        import time
+        time.sleep(300)
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
