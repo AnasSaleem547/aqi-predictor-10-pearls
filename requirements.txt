@@ -1,38 +1,20 @@
-# Core Data Science & ML Libraries
-numpy==1.26.4
-pandas==2.1.4
-scikit-learn==1.7.2
-scipy==1.16.2
-
-# Model Libraries
-xgboost==3.1.1
-lightgbm==4.5.0
-
-# Hyperparameter Optimization
-optuna==4.1.0
-
-# Feature Store & Cloud
-hopsworks==4.2.3
-boto3==1.40.59
-
-# Data Visualization
-matplotlib==3.10.7
-seaborn==0.13.2
-plotly==5.24.1
-
-# Feature Importance & Interpretability
-shap==0.46.0
-lime==0.2.0.1
-
-# Streamlit for Dashboard
-streamlit==1.40.2
-
-# Utilities
-python-dotenv==1.2.1
-pytz==2024.2
-rich==13.9.4
-tqdm==4.67.1
-requests==2.32.5
-
-# Time Series & Date Handling
-python-dateutil==2.9.0.post0
+streamlit
+pandas
+numpy
+plotly
+scikit-learn
+scipy
+xgboost
+lightgbm
+optuna
+shap
+lime
+matplotlib
+seaborn
+python-dotenv
+pytz
+requests
+tqdm
+python-dateutil
+rich
+hopsworks; platform_system != "Linux"
