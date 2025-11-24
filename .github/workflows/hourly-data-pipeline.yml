@@ -43,5 +43,5 @@ jobs:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
-          echo "🚀 Starting hourly AQI data pipeline..."
+          echo "Starting hourly AQI data pipeline..."
           python unified_aqi_hopsworks_pipeline.py hourly --max-gap-hours 720

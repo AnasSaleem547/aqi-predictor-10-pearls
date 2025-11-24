@@ -53,7 +53,7 @@ jobs:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
-          echo "🚀 Starting daily model retraining..."
+          echo "Starting daily model retraining..."
           python unified_model_training.py 2>&1 | tee training_output.txt
 
       - name: List produced artifacts
@@ -84,6 +84,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "🤖 Daily model retraining - $(date)"
+            git commit -m "Daily model retraining - $(date)"
             git push
           fi
