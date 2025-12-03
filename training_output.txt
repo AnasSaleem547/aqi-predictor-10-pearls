@@ -1,30 +1,158 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2025-12-03 02:27:20 PKT
+🕐 Pipeline started at: 2025-12-04 02:25:28 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2025-12-03 02:27:22 PKT
+⏰ Started at: 2025-12-04 02:25:30 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/12_03_2025_0227_pkt
+📁 Output directory: randomforest_additional/12_04_2025_0225_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2025-12-03 02:27:22,246 INFO: Initializing external client
-2025-12-03 02:27:22,246 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-12-03 02:27:22,811 INFO: Python Engine initialized.
+2025-12-04 02:25:30,855 INFO: Initializing external client
+2025-12-04 02:25:30,856 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-12-04 02:25:31,434 INFO: Python Engine initialized.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (19.43s) 
-🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 9926 records
-📊 Shape: (9926, 25)
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   2025-12-04 02:26:14,604 ERROR: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):
+  File "/usr/src/app/src/server.py", line 142, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 166, in wrapper
+    result = func(instance, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 196, in do_get
+    return self._read_query(context, path, command)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 123, in wrapper
+    return func(instance, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 131, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 227, in _read_query
+    result_batches = self.hudi_query_engine.read_query(query_obj)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_query_engine.py", line 63, in read_query
+    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_hopsfs_client.py", line 55, in get_featuregroup_parquet_paths
+    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_hopsfs_client.py", line 185, in _get_partition_keys_from_metadata
+    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), "rt") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1139, in open
+    self.open(
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1151, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 22, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 178, in _open
+    stream = method(path, **_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_fs.pyx", line 789, in pyarrow._fs.FileSystem.open_input_file
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "pyarrow/_flight.pyx", line 2255, in pyarrow._flight._do_get
+  File "/usr/src/app/src/server.py", line 145, in wrapper
+    raise FlyingDuckException(str(e)) from e
+utils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
+. gRPC client debug context: UNKNOWN:Error received from peer ipv4:51.79.26.27:5005 {created_time:"2025-12-04T02:26:14.603890565+05:00", grpc_status:2, grpc_message:"[Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):\n  File \"/usr/src/app/src/server.py\", line 142, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 166, in wrapper\n    result = func(instance, *args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 196, in do_get\n    return self._read_query(context, path, command)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 123, in wrapper\n    return func(instance, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 131, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 227, in _read_query\n    result_batches = self.hudi_query_engine.read_query(query_obj)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_query_engine.py\", line 63, in read_query\n    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 55, in get_featuregroup_parquet_paths\n    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 185, in _get_partition_keys_from_metadata\n    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), \"rt\") as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1139, in open\n    self.open(\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1151, in open\n    f = self._open(\n        ^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 22, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 178, in _open\n    stream = method(path, **_kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_fs.pyx\", line 789, in pyarrow._fs.FileSystem.open_input_file\n  File \"pyarrow/error.pxi\", line 155, in pyarrow.lib.pyarrow_internal_check_status\n  File \"pyarrow/error.pxi\", line 92, in pyarrow.lib.check_status\nOSError: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"pyarrow/_flight.pyx\", line 2255, in pyarrow._flight._do_get\n  File \"/usr/src/app/src/server.py\", line 145, in wrapper\n    raise FlyingDuckException(str(e)) from e\nutils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n"}. Client context: IOError: Server never sent a data message. Detail: Internal
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 394, in afs_error_handler_wrapper
+    return func(instance, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 459, in read_query
+    return self._get_dataset(
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 55, in wrapped_f
+    return Retrying(*dargs, **dkw).call(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 279, in call
+    return attempt.get(self._wrap_exception)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 326, in get
+    raise exc.with_traceback(tb)
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 273, in call
+    attempt = Attempt(fn(*args, **kwargs), attempt_number, False)
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 445, in _get_dataset
+    reader = self._connection.do_get(info.endpoints[0].ticket, options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_flight.pyx", line 1701, in pyarrow._flight.FlightClient.do_get
+  File "pyarrow/_flight.pyx", line 58, in pyarrow._flight.check_flight_status
+pyarrow._flight.FlightServerError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):
+  File "/usr/src/app/src/server.py", line 142, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 166, in wrapper
+    result = func(instance, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 196, in do_get
+    return self._read_query(context, path, command)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 123, in wrapper
+    return func(instance, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 131, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/server.py", line 227, in _read_query
+    result_batches = self.hudi_query_engine.read_query(query_obj)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_query_engine.py", line 63, in read_query
+    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_hopsfs_client.py", line 55, in get_featuregroup_parquet_paths
+    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/src/hudi_hopsfs_client.py", line 185, in _get_partition_keys_from_metadata
+    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), "rt") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1139, in open
+    self.open(
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1151, in open
+    f = self._open(
+        ^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 22, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 178, in _open
+    stream = method(path, **_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_fs.pyx", line 789, in pyarrow._fs.FileSystem.open_input_file
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "pyarrow/_flight.pyx", line 2255, in pyarrow._flight._do_get
+  File "/usr/src/app/src/server.py", line 145, in wrapper
+    raise FlyingDuckException(str(e)) from e
+utils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
+. gRPC client debug context: UNKNOWN:Error received from peer ipv4:51.79.26.27:5005 {created_time:"2025-12-04T02:26:14.603890565+05:00", grpc_status:2, grpc_message:"[Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):\n  File \"/usr/src/app/src/server.py\", line 142, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 166, in wrapper\n    result = func(instance, *args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 196, in do_get\n    return self._read_query(context, path, command)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 123, in wrapper\n    return func(instance, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 131, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 227, in _read_query\n    result_batches = self.hudi_query_engine.read_query(query_obj)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_query_engine.py\", line 63, in read_query\n    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 55, in get_featuregroup_parquet_paths\n    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 185, in _get_partition_keys_from_metadata\n    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), \"rt\") as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1139, in open\n    self.open(\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1151, in open\n    f = self._open(\n        ^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 22, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 178, in _open\n    stream = method(path, **_kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_fs.pyx\", line 789, in pyarrow._fs.FileSystem.open_input_file\n  File \"pyarrow/error.pxi\", line 155, in pyarrow.lib.pyarrow_internal_check_status\n  File \"pyarrow/error.pxi\", line 92, in pyarrow.lib.check_status\nOSError: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"pyarrow/_flight.pyx\", line 2255, in pyarrow._flight._do_get\n  File \"/usr/src/app/src/server.py\", line 145, in wrapper\n    raise FlyingDuckException(str(e)) from e\nutils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n"}. Client context: IOError: Server never sent a data message. Detail: Internal
+Error: Reading data from Hopsworks, using Hopsworks Feature Query Service           
+❌ Failed to retrieve features from Hopsworks: Could not read data using Hopsworks Query Service.
+⚠️ Trying local CSV files...
+📁 Loading data from local file: retrieved_karachi_aqi_features15.csv
+✅ Loaded 9704 records from retrieved_karachi_aqi_features15.csv
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -35,11 +163,11 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 9921 records
+   ✅ After preprocessing: 9699 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 1 samples
+⚠️ Skipping split - insufficient training data: 4 samples
 ✅ Created 4 time series splits
 
 🤖 Step 4: Training Random Forest models...
@@ -49,70 +177,70 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 2.7190
-🌲 OOB Score: 0.9977
+📊 Validation RMSE: 3.6772
+🌲 OOB Score: 0.9978
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 9.1144
-RMSE                : 28.7659
-R2                  : 0.8949
-MAPE                : 0.0241
-Explained Variance  : 0.9005
-🏆 New best model found! R² = 0.8949
+MAE                 : 8.8554
+RMSE                : 28.5162
+R2                  : 0.8941
+MAPE                : 0.0230
+Explained Variance  : 0.8996
+🏆 New best model found! R² = 0.8941
 
 📍 Training on split 2/4
 🤖 Training Random Forest model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 1.5367
-🌲 OOB Score: 0.9994
+📊 Validation RMSE: 1.5290
+🌲 OOB Score: 0.9993
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.4742
-RMSE                : 3.1542
-R2                  : 0.9988
-MAPE                : 0.0227
-Explained Variance  : 0.9988
-🏆 New best model found! R² = 0.9988
+MAE                 : 1.4041
+RMSE                : 3.1414
+R2                  : 0.9989
+MAPE                : 0.0217
+Explained Variance  : 0.9989
+🏆 New best model found! R² = 0.9989
 
 📍 Training on split 3/4
 🤖 Training Random Forest model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 3.8819
-🌲 OOB Score: 0.9997
+📊 Validation RMSE: 3.2855
+🌲 OOB Score: 0.9996
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.5810
-RMSE                : 3.1498
-R2                  : 0.9792
-MAPE                : 0.0192
-Explained Variance  : 0.9806
+MAE                 : 1.7683
+RMSE                : 3.2475
+R2                  : 0.9785
+MAPE                : 0.0212
+Explained Variance  : 0.9805
 
 📍 Training on split 4/4
 🤖 Training Random Forest model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 0.8678
+📊 Validation RMSE: 0.9345
 🌲 OOB Score: 0.9997
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 0.5851
-RMSE                : 2.0565
-R2                  : 0.9986
-MAPE                : 0.0215
-Explained Variance  : 0.9986
+MAE                 : 0.5387
+RMSE                : 2.0341
+R2                  : 0.9984
+MAPE                : 0.0217
+Explained Variance  : 0.9984
 
 📊 Step 5: Analyzing feature importance (best model from split 2)...
 📊 Plotting feature importance...
@@ -125,62 +253,71 @@ Explained Variance  : 0.9986
 
 🔮 Step 8: Generating 3-day AQI forecast...
 🔮 Generating 3-day AQI forecast using recursive approach...
-📊 Starting forecast from: 2025-12-02 21:00:00+00:00
+📊 Starting forecast from: 2025-11-23 17:00:00
 🎯 Forecasting 72 hours ahead...
 ✅ Generated 72 hourly forecasts for 3 days
-📊 Forecast range: 170.0 - 299.7 AQI
-📈 Forecast average: 211.0 AQI
+📊 Forecast range: 183.5 - 285.0 AQI
+📈 Forecast average: 218.1 AQI
 
 🔧 Step 8b: Applying bias correction...
-✅ Loaded XGBoost forecasts from 12_02_2025_0225_pkt
-✅ Loaded LightGBM forecasts from 12_02_2025_0225_pkt
-📊 Reference mean from 2 models: 95.05
-📈 Random Forest forecast mean: 211.04
-📊 Reference mean: 95.05
-📊 Ratio (RF/Reference): 2.22
+✅ Loaded XGBoost forecasts from 12_03_2025_0228_pkt
+✅ Loaded LightGBM forecasts from 12_03_2025_0228_pkt
+📊 Reference mean from 2 models: 124.07
+📈 Random Forest forecast mean: 218.13
+📊 Reference mean: 124.07
+📊 Ratio (RF/Reference): 1.76
 ✅ Applied bias correction!
-📊 Correction factor: 0.450
-📊 Corrected mean: 95.05
-📊 Reduction: 115.99 AQI (55.0%)
+📊 Correction factor: 0.569
+📊 Corrected mean: 124.07
+📊 Reduction: 94.06 AQI (43.1%)
 
 💾 Step 9: Saving results...
 
 ✅ Random Forest Training Pipeline Completed Successfully!
 ============================================================
-📁 All results saved to: randomforest_additional/12_03_2025_0227_pkt
-🎯 Best R² Score: 0.9988
-📊 Best MAE: 1.4742
-📈 Best MAPE: 0.0227
+📁 All results saved to: randomforest_additional/12_04_2025_0225_pkt
+🎯 Best R² Score: 0.9989
+📊 Best MAE: 1.4041
+📈 Best MAPE: 0.0217
 
 ✅ RandomForest training completed successfully!
    Result: (RandomForestRegressor(max_depth=25, max_features=None, min_samples_leaf=2,
                       min_samples_split=6, n_estimators=500, n_jobs=-1,
-                      oob_score=True, random_state=42), {'MAE': 1.4741619805314612, 'RMSE': 3.1542473984510675, 'R2': 0.9987771900606792, 'MAPE': 0.022676877364738227, 'Explained Variance': 0.9988257192727947}, 'randomforest_additional/12_03_2025_0227_pkt')
+                      oob_score=True, random_state=42), {'MAE': 1.4041132498502689, 'RMSE': 3.1413683149231524, 'R2': 0.9988714226266033, 'MAPE': 0.021679008665032928, 'Explained Variance': 0.9988991475499336}, 'randomforest_additional/12_04_2025_0225_pkt')
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2025-12-03 02:28:34 PKT
+⏰ Started at: 2025-12-04 02:27:00 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-12-03 02:28:34,898 INFO: Closing external client and cleaning up certificates.
+2025-12-04 02:27:00,793 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-12-03 02:28:34,900 INFO: Initializing external client
-2025-12-03 02:28:34,900 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-12-03 02:28:35,422 INFO: Python Engine initialized.
+2025-12-04 02:27:00,795 INFO: Initializing external client
+2025-12-04 02:27:00,795 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-12-04 02:27:01,287 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 819, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 367, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1294, in _split
+    raise ValueError(
+ValueError: Too many splits=5 for number of samples=9945 with test_size=1989 and gap=0.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.53s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.62s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 9926 records
-📊 Shape: (9926, 25)
+✅ Successfully retrieved 9950 records
+📊 Shape: (9950, 25)
 🔧 Preprocessing data...
    🧹 Handling missing values...
    📊 Ensuring engineered features are properly calculated...
@@ -189,174 +326,51 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 9921 records
-📊 Final dataset shape: (9921, 22)
+   ✅ After preprocessing: 9945 records
+📊 Final dataset shape: (9945, 22)
 🎯 Target variable range: 9.0 - 500.0
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 1 samples
-✅ Created 4 time series splits
-
-🔁 Processing split 1/4
-----------------------------------------
-   Train: 1588 samples
-   Val:   397 samples
-   Test:  1984 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 19.9857
-Early stopping, best iteration is:
-[120]	valid_0's l2: 19.9035
-✅ Model trained with 120 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 11.1537
-RMSE                : 28.1127
-R2                  : 0.8997
-MAPE                : 0.0358
-Explained Variance  : 0.9050
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-🔍 Performing LIME analysis...
-Intercept 67.5497116249247
-Prediction_local [162.15370437]
-Right: 117.757723986641
-
-🔁 Processing split 2/4
-----------------------------------------
-   Train: 3176 samples
-   Val:   793 samples
-   Test:  1984 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 15.7885
-[200]	valid_0's l2: 15.1786
-[300]	valid_0's l2: 15.0973
-Early stopping, best iteration is:
-[264]	valid_0's l2: 15.0957
-✅ Model trained with 264 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 2.1440
-RMSE                : 3.8589
-R2                  : 0.9982
-MAPE                : 0.0295
-Explained Variance  : 0.9982
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🔁 Processing split 3/4
-----------------------------------------
-   Train: 4763 samples
-   Val:   1190 samples
-   Test:  1984 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 9.67399
-[200]	valid_0's l2: 8.44063
-Early stopping, best iteration is:
-[248]	valid_0's l2: 8.39326
-✅ Model trained with 248 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.3724
-RMSE                : 2.2860
-R2                  : 0.9890
-MAPE                : 0.0206
-Explained Variance  : 0.9891
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🔁 Processing split 4/4
-----------------------------------------
-   Train: 6350 samples
-   Val:   1587 samples
-   Test:  1984 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 2.00129
-[200]	valid_0's l2: 1.87159
-Early stopping, best iteration is:
-[245]	valid_0's l2: 1.84979
-✅ Model trained with 245 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.4572
-RMSE                : 2.8246
-R2                  : 0.9973
-MAPE                : 0.0365
-Explained Variance  : 0.9973
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🏆 Best model from split 3 with RMSE: 2.2860
-
-🌤️  Generating 3-day AQI forecasts...
-🔮 Generating 3-day AQI forecast using recursive approach...
-✅ Generated 72 hourly forecasts for 3 days
-📈 Forecast range: 90.1 - 161.9 AQI
-📊 Forecast average: 119.6 AQI
-
-📊 Forecast Summary:
-========================================
-Forecast period: 2025-12-02 22:00:00+00:00 to 2025-12-05 21:00:00+00:00
-Forecast range: 90.1 - 161.9 AQI
-Average forecast: 119.6 AQI
-💾 Saving model and results...
-✅ Forecasts saved to lgbm_additional/12_03_2025_0228_pkt/aqi_3_day_forecast.csv
-✅ Model and results saved successfully to lgbm_additional/12_03_2025_0228_pkt
-
-📊 Overall Cross-Validation Results:
-==================================================
-MAE                 : 4.0318 (avg)
-RMSE                : 9.2706 (avg)
-R2                  : 0.9710 (avg)
-MAPE                : 0.0306 (avg)
-Explained Variance  : 0.9724 (avg)
-
-🎉 Training pipeline completed successfully!
+❌ Pipeline failed: Too many splits=5 for number of samples=9945 with test_size=1989 and gap=0.
 
 ✅ LightGBM training completed successfully!
    Result: None
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2025-12-03 02:28:57 PKT
+⏰ Started at: 2025-12-04 02:27:03 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/12_03_2025_0228_pkt
+📁 Output directory: xgboost_additional/12_04_2025_0227_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2025-12-03 02:28:57,534 INFO: Closing external client and cleaning up certificates.
+2025-12-04 02:27:03,804 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2025-12-03 02:28:57,537 INFO: Initializing external client
-2025-12-03 02:28:57,537 INFO: Base URL: https://c.app.hopsworks.ai:443
-2025-12-03 02:28:58,076 INFO: Python Engine initialized.
+2025-12-04 02:27:03,806 INFO: Initializing external client
+2025-12-04 02:27:03,806 INFO: Base URL: https://c.app.hopsworks.ai:443
+2025-12-04 02:27:04,288 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 818, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 366, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1294, in _split
+    raise ValueError(
+ValueError: Too many splits=5 for number of samples=9945 with test_size=1989 and gap=0.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.56s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.58s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 9926 records
-📊 Shape: (9926, 25)
+✅ Successfully retrieved 9950 records
+📊 Shape: (9950, 25)
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -367,263 +381,25 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 9921 records
+   ✅ After preprocessing: 9945 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 1 samples
-✅ Created 4 time series splits
 
-🤖 Step 4: Training XGBoost models...
-
-📈 Training split 1/4...
-🤖 Training XGBoost model...
-✅ Using optimized hyperparameters from Optuna
-🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:65.91148
-[100]	validation_0-rmse:3.77172
-[200]	validation_0-rmse:3.73170
-[300]	validation_0-rmse:3.72950
-[400]	validation_0-rmse:3.72851
-[500]	validation_0-rmse:3.72831
-[600]	validation_0-rmse:3.72800
-[700]	validation_0-rmse:3.72804
-[800]	validation_0-rmse:3.72802
-[900]	validation_0-rmse:3.72798
-[1000]	validation_0-rmse:3.72797
-[1100]	validation_0-rmse:3.72797
-[1200]	validation_0-rmse:3.72797
-[1300]	validation_0-rmse:3.72797
-[1400]	validation_0-rmse:3.72796
-[1499]	validation_0-rmse:3.72796
-✅ Model trained successfully
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 9.7159
-RMSE                : 26.3799
-R2                  : 0.9116
-MAPE                : 0.0303
-Explained Variance  : 0.9177
-
-📈 Training split 2/4...
-🤖 Training XGBoost model...
-✅ Using optimized hyperparameters from Optuna
-🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:119.09525
-[100]	validation_0-rmse:3.62510
-[200]	validation_0-rmse:3.31796
-[300]	validation_0-rmse:3.31251
-[400]	validation_0-rmse:3.31089
-[500]	validation_0-rmse:3.31050
-[600]	validation_0-rmse:3.30987
-[700]	validation_0-rmse:3.30921
-[800]	validation_0-rmse:3.30885
-[900]	validation_0-rmse:3.30854
-[1000]	validation_0-rmse:3.30838
-[1100]	validation_0-rmse:3.30826
-[1200]	validation_0-rmse:3.30819
-[1300]	validation_0-rmse:3.30814
-[1400]	validation_0-rmse:3.30812
-[1499]	validation_0-rmse:3.30810
-✅ Model trained successfully
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 2.3615
-RMSE                : 4.2095
-R2                  : 0.9978
-MAPE                : 0.0310
-Explained Variance  : 0.9979
-
-📈 Training split 3/4...
-🤖 Training XGBoost model...
-✅ Using optimized hyperparameters from Optuna
-🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:84.90824
-[100]	validation_0-rmse:4.00730
-[200]	validation_0-rmse:3.70621
-[300]	validation_0-rmse:3.68395
-[400]	validation_0-rmse:3.67737
-[500]	validation_0-rmse:3.68054
-[600]	validation_0-rmse:3.67829
-[700]	validation_0-rmse:3.67869
-[800]	validation_0-rmse:3.67777
-[900]	validation_0-rmse:3.67901
-[1000]	validation_0-rmse:3.67838
-[1100]	validation_0-rmse:3.67855
-[1200]	validation_0-rmse:3.67796
-[1300]	validation_0-rmse:3.67810
-[1400]	validation_0-rmse:3.67812
-[1499]	validation_0-rmse:3.67827
-✅ Model trained successfully
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 2.2032
-RMSE                : 3.3489
-R2                  : 0.9764
-MAPE                : 0.0326
-Explained Variance  : 0.9772
-
-📈 Training split 4/4...
-🤖 Training XGBoost model...
-✅ Using optimized hyperparameters from Optuna
-🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:73.05505
-[100]	validation_0-rmse:1.41749
-[200]	validation_0-rmse:1.32989
-[300]	validation_0-rmse:1.32468
-[400]	validation_0-rmse:1.32320
-[500]	validation_0-rmse:1.32328
-[600]	validation_0-rmse:1.32315
-[700]	validation_0-rmse:1.32315
-[800]	validation_0-rmse:1.32290
-[900]	validation_0-rmse:1.32273
-[1000]	validation_0-rmse:1.32251
-[1100]	validation_0-rmse:1.32237
-[1200]	validation_0-rmse:1.32236
-[1300]	validation_0-rmse:1.32251
-[1400]	validation_0-rmse:1.32239
-[1499]	validation_0-rmse:1.32236
-✅ Model trained successfully
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.0922
-RMSE                : 2.6266
-R2                  : 0.9977
-MAPE                : 0.0324
-Explained Variance  : 0.9977
-
-🏆 Best model from split 2
-📊 Best metrics:
-   MAE: 2.3615
-   RMSE: 4.2095
-   R2: 0.9978
-   MAPE: 0.0310
-   Explained Variance: 0.9979
-
-📊 Step 5: Feature importance analysis...
-📊 Plotting feature importance...
-
-🔍 Step 6: Model interpretability analysis...
-🔍 Performing SHAP analysis...
-🔍 Performing LIME analysis (fast mode)...
-
-🔮 Step 7: Generating 3-day AQI forecasts...
-🔮 Generating 3-day AQI forecast using recursive approach...
-   📅 Forecasting for 2025-12-02 22:00:00+00:00...
-   📅 Forecasting for 2025-12-02 23:00:00+00:00...
-   📅 Forecasting for 2025-12-03 00:00:00+00:00...
-   📅 Forecasting for 2025-12-03 01:00:00+00:00...
-   📅 Forecasting for 2025-12-03 02:00:00+00:00...
-   📅 Forecasting for 2025-12-03 03:00:00+00:00...
-   📅 Forecasting for 2025-12-03 04:00:00+00:00...
-   📅 Forecasting for 2025-12-03 05:00:00+00:00...
-   📅 Forecasting for 2025-12-03 06:00:00+00:00...
-   📅 Forecasting for 2025-12-03 07:00:00+00:00...
-   📅 Forecasting for 2025-12-03 08:00:00+00:00...
-   📅 Forecasting for 2025-12-03 09:00:00+00:00...
-   📅 Forecasting for 2025-12-03 10:00:00+00:00...
-   📅 Forecasting for 2025-12-03 11:00:00+00:00...
-   📅 Forecasting for 2025-12-03 12:00:00+00:00...
-   📅 Forecasting for 2025-12-03 13:00:00+00:00...
-   📅 Forecasting for 2025-12-03 14:00:00+00:00...
-   📅 Forecasting for 2025-12-03 15:00:00+00:00...
-   📅 Forecasting for 2025-12-03 16:00:00+00:00...
-   📅 Forecasting for 2025-12-03 17:00:00+00:00...
-   📅 Forecasting for 2025-12-03 18:00:00+00:00...
-   📅 Forecasting for 2025-12-03 19:00:00+00:00...
-   📅 Forecasting for 2025-12-03 20:00:00+00:00...
-   📅 Forecasting for 2025-12-03 21:00:00+00:00...
-   📅 Forecasting for 2025-12-03 22:00:00+00:00...
-   📅 Forecasting for 2025-12-03 23:00:00+00:00...
-   📅 Forecasting for 2025-12-04 00:00:00+00:00...
-   📅 Forecasting for 2025-12-04 01:00:00+00:00...
-   📅 Forecasting for 2025-12-04 02:00:00+00:00...
-   📅 Forecasting for 2025-12-04 03:00:00+00:00...
-   📅 Forecasting for 2025-12-04 04:00:00+00:00...
-   📅 Forecasting for 2025-12-04 05:00:00+00:00...
-   📅 Forecasting for 2025-12-04 06:00:00+00:00...
-   📅 Forecasting for 2025-12-04 07:00:00+00:00...
-   📅 Forecasting for 2025-12-04 08:00:00+00:00...
-   📅 Forecasting for 2025-12-04 09:00:00+00:00...
-   📅 Forecasting for 2025-12-04 10:00:00+00:00...
-   📅 Forecasting for 2025-12-04 11:00:00+00:00...
-   📅 Forecasting for 2025-12-04 12:00:00+00:00...
-   📅 Forecasting for 2025-12-04 13:00:00+00:00...
-   📅 Forecasting for 2025-12-04 14:00:00+00:00...
-   📅 Forecasting for 2025-12-04 15:00:00+00:00...
-   📅 Forecasting for 2025-12-04 16:00:00+00:00...
-   📅 Forecasting for 2025-12-04 17:00:00+00:00...
-   📅 Forecasting for 2025-12-04 18:00:00+00:00...
-   📅 Forecasting for 2025-12-04 19:00:00+00:00...
-   📅 Forecasting for 2025-12-04 20:00:00+00:00...
-   📅 Forecasting for 2025-12-04 21:00:00+00:00...
-   📅 Forecasting for 2025-12-04 22:00:00+00:00...
-   📅 Forecasting for 2025-12-04 23:00:00+00:00...
-   📅 Forecasting for 2025-12-05 00:00:00+00:00...
-   📅 Forecasting for 2025-12-05 01:00:00+00:00...
-   📅 Forecasting for 2025-12-05 02:00:00+00:00...
-   📅 Forecasting for 2025-12-05 03:00:00+00:00...
-   📅 Forecasting for 2025-12-05 04:00:00+00:00...
-   📅 Forecasting for 2025-12-05 05:00:00+00:00...
-   📅 Forecasting for 2025-12-05 06:00:00+00:00...
-   📅 Forecasting for 2025-12-05 07:00:00+00:00...
-   📅 Forecasting for 2025-12-05 08:00:00+00:00...
-   📅 Forecasting for 2025-12-05 09:00:00+00:00...
-   📅 Forecasting for 2025-12-05 10:00:00+00:00...
-   📅 Forecasting for 2025-12-05 11:00:00+00:00...
-   📅 Forecasting for 2025-12-05 12:00:00+00:00...
-   📅 Forecasting for 2025-12-05 13:00:00+00:00...
-   📅 Forecasting for 2025-12-05 14:00:00+00:00...
-   📅 Forecasting for 2025-12-05 15:00:00+00:00...
-   📅 Forecasting for 2025-12-05 16:00:00+00:00...
-   📅 Forecasting for 2025-12-05 17:00:00+00:00...
-   📅 Forecasting for 2025-12-05 18:00:00+00:00...
-   📅 Forecasting for 2025-12-05 19:00:00+00:00...
-   📅 Forecasting for 2025-12-05 20:00:00+00:00...
-   📅 Forecasting for 2025-12-05 21:00:00+00:00...
-✅ Generated 72 hourly forecasts for 3 days
-� Forecast range: 119.0 - 146.8 AQI
-📊 Forecast average: 128.6 AQI
-
-💾 Step 8: Saving results...
-
-✅ XGBoost Training Pipeline Completed Successfully!
-============================================================
-📁 All results saved to: xgboost_additional/12_03_2025_0228_pkt
-🎯 Best R² Score: 0.9978
-📊 Best MAE: 2.3615
-📈 Best MAPE: 0.0310
+❌ Error in training pipeline: Too many splits=5 for number of samples=9945 with test_size=1989 and gap=0.
 
 ✅ XGBoost training completed successfully!
-   Result: (XGBRegressor(base_score=None, booster='gbtree', callbacks=None,
-             colsample_bylevel=None, colsample_bynode=None,
-             colsample_bytree=0.85, device=None, early_stopping_rounds=None,
-             enable_categorical=False, eval_metric='rmse', feature_types=None,
-             feature_weights=None, gamma=None, grow_policy=None,
-             importance_type=None, interaction_constraints=None,
-             learning_rate=0.05, max_bin=None, max_cat_threshold=None,
-             max_cat_to_onehot=None, max_delta_step=None, max_depth=8,
-             max_leaves=None, min_child_weight=None, missing=nan,
-             monotone_constraints=None, multi_strategy=None, n_estimators=1500,
-             n_jobs=-1, num_parallel_tree=None, ...), {'MAE': 2.3614747524261475, 'RMSE': 4.209517712004047, 'R2': 0.997822105884552, 'MAPE': 0.030986163765192032, 'Explained Variance': 0.9978779554367065}, 'xgboost_additional/12_03_2025_0228_pkt')
+   Result: (None, None, None)
 
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2025-12-03 02:29:48 PKT
+⏰ Completed at: 2025-12-04 02:27:07 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2025-12-03 02:29:48,220 INFO: Closing external client and cleaning up certificates.
+2025-12-04 02:27:07,093 INFO: Closing external client and cleaning up certificates.
 Connection closed.
