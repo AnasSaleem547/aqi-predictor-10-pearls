@@ -1,30 +1,30 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2026-01-08 02:27:58 PKT
+🕐 Pipeline started at: 2026-01-09 02:30:11 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2026-01-08 02:28:01 PKT
+⏰ Started at: 2026-01-09 02:30:15 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/01_08_2026_0228_pkt
+📁 Output directory: randomforest_additional/01_09_2026_0230_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-08 02:28:01,673 INFO: Initializing external client
-2026-01-08 02:28:01,673 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-08 02:28:02,995 INFO: Python Engine initialized.
+2026-01-09 02:30:15,165 INFO: Initializing external client
+2026-01-09 02:30:15,165 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-09 02:30:15,999 INFO: Python Engine initialized.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.14s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.95s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 10779 records
-📊 Shape: (10779, 25)
+✅ Successfully retrieved 10803 records
+📊 Shape: (10803, 25)
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -35,11 +35,11 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 10774 records
+   ✅ After preprocessing: 10798 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 3 samples
 ✅ Created 4 time series splits
 
 🤖 Step 4: Training Random Forest models...
@@ -49,34 +49,34 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 13.9342
+📊 Validation RMSE: 13.8926
 🌲 OOB Score: 0.9981
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 9.5860
-RMSE                : 30.5329
-R2                  : 0.8962
+MAE                 : 9.5691
+RMSE                : 30.4874
+R2                  : 0.8963
 MAPE                : 0.0243
-Explained Variance  : 0.9028
-🏆 New best model found! R² = 0.8962
+Explained Variance  : 0.9029
+🏆 New best model found! R² = 0.8963
 
 📍 Training on split 2/4
 🤖 Training Random Forest model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 2.1125
+📊 Validation RMSE: 2.1009
 🌲 OOB Score: 0.9995
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 2.0531
-RMSE                : 3.7361
+MAE                 : 2.0278
+RMSE                : 3.6984
 R2                  : 0.9969
-MAPE                : 0.0283
+MAPE                : 0.0281
 Explained Variance  : 0.9971
 🏆 New best model found! R² = 0.9969
 
@@ -85,35 +85,35 @@ Explained Variance  : 0.9971
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 3.5834
+📊 Validation RMSE: 3.5855
 🌲 OOB Score: 0.9997
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.3343
-RMSE                : 2.7262
+MAE                 : 1.3476
+RMSE                : 2.7200
 R2                  : 0.9850
-MAPE                : 0.0592
-Explained Variance  : 0.9856
+MAPE                : 0.0596
+Explained Variance  : 0.9857
 
 📍 Training on split 4/4
 🤖 Training Random Forest model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: n_estimators=500, max_depth=25, min_samples_split=6
 ✅ Model trained successfully
-📊 Validation RMSE: 1.1923
+📊 Validation RMSE: 1.1881
 🌲 OOB Score: 0.9997
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 0.4513
-RMSE                : 2.4881
-R2                  : 0.9976
-MAPE                : 0.0046
+MAE                 : 0.4305
+RMSE                : 2.4896
+R2                  : 0.9975
+MAPE                : 0.0045
 Explained Variance  : 0.9976
-🏆 New best model found! R² = 0.9976
+🏆 New best model found! R² = 0.9975
 
 📊 Step 5: Analyzing feature importance (best model from split 4)...
 📊 Plotting feature importance...
@@ -126,61 +126,61 @@ Explained Variance  : 0.9976
 
 🔮 Step 8: Generating 3-day AQI forecast...
 🔮 Generating 3-day AQI forecast using recursive approach...
-📊 Starting forecast from: 2026-01-07 21:00:00+00:00
+📊 Starting forecast from: 2026-01-08 21:00:00+00:00
 🎯 Forecasting 72 hours ahead...
 ✅ Generated 72 hourly forecasts for 3 days
-📊 Forecast range: 149.2 - 270.0 AQI
-📈 Forecast average: 197.7 AQI
+📊 Forecast range: 160.0 - 293.1 AQI
+📈 Forecast average: 211.1 AQI
 
 🔧 Step 8b: Applying bias correction...
 ✅ Loaded LightGBM forecasts from 12_31_2025_0228_pkt
 📊 Reference mean from 1 models: 123.59
-📈 Random Forest forecast mean: 197.68
+📈 Random Forest forecast mean: 211.06
 📊 Reference mean: 123.59
-📊 Ratio (RF/Reference): 1.60
+📊 Ratio (RF/Reference): 1.71
 ✅ Applied bias correction!
-📊 Correction factor: 0.625
+📊 Correction factor: 0.586
 📊 Corrected mean: 123.59
-📊 Reduction: 74.08 AQI (37.5%)
+📊 Reduction: 87.46 AQI (41.4%)
 
 💾 Step 9: Saving results...
 
 ✅ Random Forest Training Pipeline Completed Successfully!
 ============================================================
-📁 All results saved to: randomforest_additional/01_08_2026_0228_pkt
-🎯 Best R² Score: 0.9976
-📊 Best MAE: 0.4513
-📈 Best MAPE: 0.0046
+📁 All results saved to: randomforest_additional/01_09_2026_0230_pkt
+🎯 Best R² Score: 0.9975
+📊 Best MAE: 0.4305
+📈 Best MAPE: 0.0045
 
 ✅ RandomForest training completed successfully!
    Result: (RandomForestRegressor(max_depth=25, max_features=None, min_samples_leaf=2,
                       min_samples_split=6, n_estimators=500, n_jobs=-1,
-                      oob_score=True, random_state=42), {'MAE': 0.45126389454711396, 'RMSE': 2.4881181159653747, 'R2': 0.9975616696188008, 'MAPE': 0.004555533528682346, 'Explained Variance': 0.9976268284038122}, 'randomforest_additional/01_08_2026_0228_pkt')
+                      oob_score=True, random_state=42), {'MAE': 0.4305046600458397, 'RMSE': 2.4896079853829414, 'R2': 0.9975048573421177, 'MAPE': 0.004485917001795907, 'Explained Variance': 0.9975631492840012}, 'randomforest_additional/01_09_2026_0230_pkt')
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2026-01-08 02:29:13 PKT
+⏰ Started at: 2026-01-09 02:31:26 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-08 02:29:13,449 INFO: Closing external client and cleaning up certificates.
+2026-01-09 02:31:26,853 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-08 02:29:13,452 INFO: Initializing external client
-2026-01-08 02:29:13,452 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-08 02:29:14,417 INFO: Python Engine initialized.
+2026-01-09 02:31:26,855 INFO: Initializing external client
+2026-01-09 02:31:26,856 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-09 02:31:27,346 INFO: Python Engine initialized.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.21s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.72s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 10779 records
-📊 Shape: (10779, 25)
+✅ Successfully retrieved 10803 records
+📊 Shape: (10803, 25)
 🔧 Preprocessing data...
    🧹 Handling missing values...
    📊 Ensuring engineered features are properly calculated...
@@ -189,142 +189,143 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 10774 records
-📊 Final dataset shape: (10774, 22)
+   ✅ After preprocessing: 10798 records
+📊 Final dataset shape: (10798, 22)
 🎯 Target variable range: 9.0 - 500.0
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 3 samples
 ✅ Created 4 time series splits
 
 🔁 Processing split 1/4
 ----------------------------------------
-   Train: 1727 samples
-   Val:   431 samples
-   Test:  2154 samples
+   Train: 1730 samples
+   Val:   432 samples
+   Test:  2159 samples
 🤖 Training LightGBM model...
 ✅ Using optimized hyperparameters
 Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 213.007
-[200]	valid_0's l2: 187.003
-[300]	valid_0's l2: 179.126
-[400]	valid_0's l2: 175.929
-[500]	valid_0's l2: 173.373
+[100]	valid_0's l2: 213.976
+[200]	valid_0's l2: 186.007
+[300]	valid_0's l2: 177.249
+[400]	valid_0's l2: 172.819
+[500]	valid_0's l2: 170.855
 Early stopping, best iteration is:
-[504]	valid_0's l2: 173.357
-✅ Model trained with 503 iterations
+[496]	valid_0's l2: 170.855
+✅ Model trained with 496 iterations
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 11.4838
-RMSE                : 28.5578
-R2                  : 0.9092
-MAPE                : 0.0362
-Explained Variance  : 0.9156
+MAE                 : 11.5987
+RMSE                : 28.4717
+R2                  : 0.9095
+MAPE                : 0.0369
+Explained Variance  : 0.9152
 📊 Plotting feature importance...
 🔍 Performing SHAP analysis...
 🔍 Performing LIME analysis...
-Intercept 92.27154976226393
-Prediction_local [102.10697118]
-Right: 104.6071320084357
+Intercept 70.79391769563313
+Prediction_local [168.45057447]
+Right: 145.5208736643835
 
 🔁 Processing split 2/4
 ----------------------------------------
-   Train: 3450 samples
-   Val:   862 samples
-   Test:  2154 samples
+   Train: 3457 samples
+   Val:   864 samples
+   Test:  2159 samples
 🤖 Training LightGBM model...
 ✅ Using optimized hyperparameters
 Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 17.22
+[100]	valid_0's l2: 16.6768
 Early stopping, best iteration is:
-[101]	valid_0's l2: 17.2132
-✅ Model trained with 101 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.9977
-RMSE                : 3.4484
-R2                  : 0.9973
-MAPE                : 0.0280
-Explained Variance  : 0.9974
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🔁 Processing split 3/4
-----------------------------------------
-   Train: 5173 samples
-   Val:   1293 samples
-   Test:  2154 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 6.63555
-Early stopping, best iteration is:
-[140]	valid_0's l2: 6.48903
+[140]	valid_0's l2: 16.4007
 ✅ Model trained with 140 iterations
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.8196
-RMSE                : 3.3360
-R2                  : 0.9776
-MAPE                : 0.0837
-Explained Variance  : 0.9791
+MAE                 : 2.1450
+RMSE                : 3.5671
+R2                  : 0.9971
+MAPE                : 0.0290
+Explained Variance  : 0.9972
+📊 Plotting feature importance...
+🔍 Performing SHAP analysis...
+
+🔁 Processing split 3/4
+----------------------------------------
+   Train: 5184 samples
+   Val:   1296 samples
+   Test:  2159 samples
+🤖 Training LightGBM model...
+✅ Using optimized hyperparameters
+Training until validation scores don't improve for 50 rounds
+[100]	valid_0's l2: 7.41601
+[200]	valid_0's l2: 6.95225
+Early stopping, best iteration is:
+[245]	valid_0's l2: 6.83642
+✅ Model trained with 245 iterations
+📊 Evaluating model performance...
+
+📈 Model Performance Metrics:
+==================================================
+MAE                 : 1.8168
+RMSE                : 3.1915
+R2                  : 0.9794
+MAPE                : 0.0781
+Explained Variance  : 0.9806
 📊 Plotting feature importance...
 🔍 Performing SHAP analysis...
 
 🔁 Processing split 4/4
 ----------------------------------------
-   Train: 6896 samples
-   Val:   1724 samples
-   Test:  2154 samples
+   Train: 6912 samples
+   Val:   1727 samples
+   Test:  2159 samples
 🤖 Training LightGBM model...
 ✅ Using optimized hyperparameters
 Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 3.72399
-[200]	valid_0's l2: 3.53245
+[100]	valid_0's l2: 3.44678
+[200]	valid_0's l2: 3.35369
 Early stopping, best iteration is:
-[240]	valid_0's l2: 3.49189
-✅ Model trained with 240 iterations
+[242]	valid_0's l2: 3.34039
+✅ Model trained with 242 iterations
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.4706
-RMSE                : 3.4114
+MAE                 : 1.4129
+RMSE                : 3.3628
 R2                  : 0.9954
-MAPE                : 0.0137
-Explained Variance  : 0.9954
+MAPE                : 0.0136
+Explained Variance  : 0.9955
 📊 Plotting feature importance...
 🔍 Performing SHAP analysis...
 
-🏆 Best model from split 3 with RMSE: 3.3360
+🏆 Best model from split 3 with RMSE: 3.1915
 
 🌤️  Generating 3-day AQI forecasts...
 🔮 Generating 3-day AQI forecast using recursive approach...
 ✅ Generated 72 hourly forecasts for 3 days
-📈 Forecast range: 95.5 - 136.8 AQI
-📊 Forecast average: 124.5 AQI
+📈 Forecast range: 87.7 - 135.1 AQI
+📊 Forecast average: 104.6 AQI
 
 📊 Forecast Summary:
 ========================================
-Forecast period: 2026-01-07 22:00:00+00:00 to 2026-01-10 21:00:00+00:00
-Forecast range: 95.5 - 136.8 AQI
-Average forecast: 124.5 AQI
+Forecast period: 2026-01-08 22:00:00+00:00 to 2026-01-11 21:00:00+00:00
+Forecast range: 87.7 - 135.1 AQI
+Average forecast: 104.6 AQI
 💾 Saving model and results...
-✅ Forecasts saved to lgbm_additional/01_08_2026_0229_pkt/aqi_3_day_forecast.csv
-✅ Model and results saved successfully to lgbm_additional/01_08_2026_0229_pkt
+✅ Forecasts saved to lgbm_additional/01_09_2026_0231_pkt/aqi_3_day_forecast.csv
+✅ Model and results saved successfully to lgbm_additional/01_09_2026_0231_pkt
 
 📊 Overall Cross-Validation Results:
 ==================================================
-MAE                 : 4.1929 (avg)
-RMSE                : 9.6884 (avg)
-R2                  : 0.9699 (avg)
-MAPE                : 0.0404 (avg)
-Explained Variance  : 0.9719 (avg)
+MAE                 : 4.2434 (avg)
+RMSE                : 9.6483 (avg)
+R2                  : 0.9704 (avg)
+MAPE                : 0.0394 (avg)
+Explained Variance  : 0.9721 (avg)
 
 🎉 Training pipeline completed successfully!
 
@@ -333,31 +334,31 @@ Explained Variance  : 0.9719 (avg)
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2026-01-08 02:29:39 PKT
+⏰ Started at: 2026-01-09 02:31:51 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/01_08_2026_0229_pkt
+📁 Output directory: xgboost_additional/01_09_2026_0231_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-08 02:29:39,298 INFO: Closing external client and cleaning up certificates.
+2026-01-09 02:31:51,981 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-08 02:29:39,300 INFO: Initializing external client
-2026-01-08 02:29:39,300 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-08 02:29:40,239 INFO: Python Engine initialized.
+2026-01-09 02:31:51,983 INFO: Initializing external client
+2026-01-09 02:31:51,984 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-09 02:31:52,619 INFO: Python Engine initialized.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.35s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.72s) 
 🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 10779 records
-📊 Shape: (10779, 25)
+✅ Successfully retrieved 10803 records
+📊 Shape: (10803, 25)
 
 🔧 Step 2: Preprocessing data...
 🔧 Preprocessing data...
@@ -368,11 +369,11 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 10774 records
+   ✅ After preprocessing: 10798 records
 
 📊 Step 3: Creating time series splits...
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 4 samples
+⚠️ Skipping split - insufficient training data: 3 samples
 ✅ Created 4 time series splits
 
 🤖 Step 4: Training XGBoost models...
@@ -381,115 +382,115 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 🤖 Training XGBoost model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:89.93372
-[100]	validation_0-rmse:12.87767
-[200]	validation_0-rmse:12.63952
-[300]	validation_0-rmse:12.63626
-[400]	validation_0-rmse:12.63526
-[500]	validation_0-rmse:12.63475
-[600]	validation_0-rmse:12.63426
-[700]	validation_0-rmse:12.63397
-[800]	validation_0-rmse:12.63384
-[900]	validation_0-rmse:12.63380
-[1000]	validation_0-rmse:12.63378
-[1100]	validation_0-rmse:12.63378
-[1200]	validation_0-rmse:12.63378
-[1300]	validation_0-rmse:12.63378
-[1400]	validation_0-rmse:12.63377
-[1499]	validation_0-rmse:12.63377
+[0]	validation_0-rmse:89.73739
+[100]	validation_0-rmse:12.81447
+[200]	validation_0-rmse:12.58344
+[300]	validation_0-rmse:12.57967
+[400]	validation_0-rmse:12.57910
+[500]	validation_0-rmse:12.57924
+[600]	validation_0-rmse:12.57903
+[700]	validation_0-rmse:12.57895
+[800]	validation_0-rmse:12.57884
+[900]	validation_0-rmse:12.57884
+[1000]	validation_0-rmse:12.57885
+[1100]	validation_0-rmse:12.57885
+[1200]	validation_0-rmse:12.57885
+[1300]	validation_0-rmse:12.57885
+[1400]	validation_0-rmse:12.57883
+[1499]	validation_0-rmse:12.57883
 ✅ Model trained successfully
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 10.5412
-RMSE                : 28.0470
-R2                  : 0.9124
-MAPE                : 0.0323
-Explained Variance  : 0.9197
+MAE                 : 10.4301
+RMSE                : 27.9500
+R2                  : 0.9128
+MAPE                : 0.0321
+Explained Variance  : 0.9196
 
 📈 Training split 2/4...
 🤖 Training XGBoost model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:115.80031
-[100]	validation_0-rmse:3.50147
-[200]	validation_0-rmse:3.26944
-[300]	validation_0-rmse:3.26676
-[400]	validation_0-rmse:3.26624
-[500]	validation_0-rmse:3.26494
-[600]	validation_0-rmse:3.26513
-[700]	validation_0-rmse:3.26512
-[800]	validation_0-rmse:3.26505
-[900]	validation_0-rmse:3.26517
-[1000]	validation_0-rmse:3.26529
-[1100]	validation_0-rmse:3.26538
-[1200]	validation_0-rmse:3.26543
-[1300]	validation_0-rmse:3.26547
-[1400]	validation_0-rmse:3.26545
-[1499]	validation_0-rmse:3.26547
+[0]	validation_0-rmse:115.14395
+[100]	validation_0-rmse:3.34297
+[200]	validation_0-rmse:3.15517
+[300]	validation_0-rmse:3.15203
+[400]	validation_0-rmse:3.15083
+[500]	validation_0-rmse:3.15047
+[600]	validation_0-rmse:3.15049
+[700]	validation_0-rmse:3.15014
+[800]	validation_0-rmse:3.15005
+[900]	validation_0-rmse:3.14999
+[1000]	validation_0-rmse:3.15000
+[1100]	validation_0-rmse:3.15008
+[1200]	validation_0-rmse:3.15007
+[1300]	validation_0-rmse:3.15008
+[1400]	validation_0-rmse:3.15008
+[1499]	validation_0-rmse:3.15008
 ✅ Model trained successfully
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 2.5219
-RMSE                : 4.0148
-R2                  : 0.9964
-MAPE                : 0.0353
-Explained Variance  : 0.9965
+MAE                 : 2.7628
+RMSE                : 4.4065
+R2                  : 0.9956
+MAPE                : 0.0372
+Explained Variance  : 0.9959
 
 📈 Training split 3/4...
 🤖 Training XGBoost model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:79.76845
-[100]	validation_0-rmse:3.46906
-[200]	validation_0-rmse:3.25963
-[300]	validation_0-rmse:3.25654
-[400]	validation_0-rmse:3.25145
-[500]	validation_0-rmse:3.24601
-[600]	validation_0-rmse:3.24546
-[700]	validation_0-rmse:3.24618
-[800]	validation_0-rmse:3.24525
-[900]	validation_0-rmse:3.24629
-[1000]	validation_0-rmse:3.24847
-[1100]	validation_0-rmse:3.24939
-[1200]	validation_0-rmse:3.24917
-[1300]	validation_0-rmse:3.25007
-[1400]	validation_0-rmse:3.25021
-[1499]	validation_0-rmse:3.25030
+[0]	validation_0-rmse:79.35041
+[100]	validation_0-rmse:3.44801
+[200]	validation_0-rmse:3.17591
+[300]	validation_0-rmse:3.17248
+[400]	validation_0-rmse:3.16028
+[500]	validation_0-rmse:3.15311
+[600]	validation_0-rmse:3.15133
+[700]	validation_0-rmse:3.15150
+[800]	validation_0-rmse:3.15302
+[900]	validation_0-rmse:3.15175
+[1000]	validation_0-rmse:3.15197
+[1100]	validation_0-rmse:3.15232
+[1200]	validation_0-rmse:3.15324
+[1300]	validation_0-rmse:3.15313
+[1400]	validation_0-rmse:3.15315
+[1499]	validation_0-rmse:3.15345
 ✅ Model trained successfully
 📊 Evaluating model performance...
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.8568
-RMSE                : 3.0870
-R2                  : 0.9808
-MAPE                : 0.0714
-Explained Variance  : 0.9814
+MAE                 : 1.7497
+RMSE                : 3.0980
+R2                  : 0.9806
+MAPE                : 0.0755
+Explained Variance  : 0.9826
 
 📈 Training split 4/4...
 🤖 Training XGBoost model...
 ✅ Using optimized hyperparameters from Optuna
 🎯 Key params: max_depth=8, learning_rate=0.050, n_estimators=1500
-[0]	validation_0-rmse:85.34134
-[100]	validation_0-rmse:1.79526
-[200]	validation_0-rmse:1.64866
-[300]	validation_0-rmse:1.64618
-[400]	validation_0-rmse:1.65251
-[500]	validation_0-rmse:1.65344
-[600]	validation_0-rmse:1.65379
-[700]	validation_0-rmse:1.65541
-[800]	validation_0-rmse:1.65746
-[900]	validation_0-rmse:1.65742
-[1000]	validation_0-rmse:1.65842
-[1100]	validation_0-rmse:1.65904
-[1200]	validation_0-rmse:1.65893
-[1300]	validation_0-rmse:1.65949
-[1400]	validation_0-rmse:1.65960
-[1499]	validation_0-rmse:1.65937
+[0]	validation_0-rmse:85.59271
+[100]	validation_0-rmse:1.78763
+[200]	validation_0-rmse:1.64419
+[300]	validation_0-rmse:1.62740
+[400]	validation_0-rmse:1.63002
+[500]	validation_0-rmse:1.63192
+[600]	validation_0-rmse:1.63399
+[700]	validation_0-rmse:1.63337
+[800]	validation_0-rmse:1.63361
+[900]	validation_0-rmse:1.63319
+[1000]	validation_0-rmse:1.63318
+[1100]	validation_0-rmse:1.63267
+[1200]	validation_0-rmse:1.63216
+[1300]	validation_0-rmse:1.63209
+[1400]	validation_0-rmse:1.63220
+[1499]	validation_0-rmse:1.63230
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 896, in main
     best_model.save_model(model_path)
@@ -504,19 +505,19 @@ TypeError: `_estimator_type` undefined.  Please use appropriate mixin to define 
 
 📈 Model Performance Metrics:
 ==================================================
-MAE                 : 1.1649
-RMSE                : 2.9876
-R2                  : 0.9965
-MAPE                : 0.0117
-Explained Variance  : 0.9965
+MAE                 : 1.2594
+RMSE                : 3.1337
+R2                  : 0.9960
+MAPE                : 0.0124
+Explained Variance  : 0.9961
 
 🏆 Best model from split 4
 📊 Best metrics:
-   MAE: 1.1649
-   RMSE: 2.9876
-   R2: 0.9965
-   MAPE: 0.0117
-   Explained Variance: 0.9965
+   MAE: 1.2594
+   RMSE: 3.1337
+   R2: 0.9960
+   MAPE: 0.0124
+   Explained Variance: 0.9961
 
 📊 Step 5: Feature importance analysis...
 📊 Plotting feature importance...
@@ -527,30 +528,6 @@ Explained Variance  : 0.9965
 
 🔮 Step 7: Generating 3-day AQI forecasts...
 🔮 Generating 3-day AQI forecast using recursive approach...
-   📅 Forecasting for 2026-01-07 22:00:00+00:00...
-   📅 Forecasting for 2026-01-07 23:00:00+00:00...
-   📅 Forecasting for 2026-01-08 00:00:00+00:00...
-   📅 Forecasting for 2026-01-08 01:00:00+00:00...
-   📅 Forecasting for 2026-01-08 02:00:00+00:00...
-   📅 Forecasting for 2026-01-08 03:00:00+00:00...
-   📅 Forecasting for 2026-01-08 04:00:00+00:00...
-   📅 Forecasting for 2026-01-08 05:00:00+00:00...
-   📅 Forecasting for 2026-01-08 06:00:00+00:00...
-   📅 Forecasting for 2026-01-08 07:00:00+00:00...
-   📅 Forecasting for 2026-01-08 08:00:00+00:00...
-   📅 Forecasting for 2026-01-08 09:00:00+00:00...
-   📅 Forecasting for 2026-01-08 10:00:00+00:00...
-   📅 Forecasting for 2026-01-08 11:00:00+00:00...
-   📅 Forecasting for 2026-01-08 12:00:00+00:00...
-   📅 Forecasting for 2026-01-08 13:00:00+00:00...
-   📅 Forecasting for 2026-01-08 14:00:00+00:00...
-   📅 Forecasting for 2026-01-08 15:00:00+00:00...
-   📅 Forecasting for 2026-01-08 16:00:00+00:00...
-   📅 Forecasting for 2026-01-08 17:00:00+00:00...
-   📅 Forecasting for 2026-01-08 18:00:00+00:00...
-   📅 Forecasting for 2026-01-08 19:00:00+00:00...
-   📅 Forecasting for 2026-01-08 20:00:00+00:00...
-   📅 Forecasting for 2026-01-08 21:00:00+00:00...
    📅 Forecasting for 2026-01-08 22:00:00+00:00...
    📅 Forecasting for 2026-01-08 23:00:00+00:00...
    📅 Forecasting for 2026-01-09 00:00:00+00:00...
@@ -599,9 +576,33 @@ Explained Variance  : 0.9965
    📅 Forecasting for 2026-01-10 19:00:00+00:00...
    📅 Forecasting for 2026-01-10 20:00:00+00:00...
    📅 Forecasting for 2026-01-10 21:00:00+00:00...
+   📅 Forecasting for 2026-01-10 22:00:00+00:00...
+   📅 Forecasting for 2026-01-10 23:00:00+00:00...
+   📅 Forecasting for 2026-01-11 00:00:00+00:00...
+   📅 Forecasting for 2026-01-11 01:00:00+00:00...
+   📅 Forecasting for 2026-01-11 02:00:00+00:00...
+   📅 Forecasting for 2026-01-11 03:00:00+00:00...
+   📅 Forecasting for 2026-01-11 04:00:00+00:00...
+   📅 Forecasting for 2026-01-11 05:00:00+00:00...
+   📅 Forecasting for 2026-01-11 06:00:00+00:00...
+   📅 Forecasting for 2026-01-11 07:00:00+00:00...
+   📅 Forecasting for 2026-01-11 08:00:00+00:00...
+   📅 Forecasting for 2026-01-11 09:00:00+00:00...
+   📅 Forecasting for 2026-01-11 10:00:00+00:00...
+   📅 Forecasting for 2026-01-11 11:00:00+00:00...
+   📅 Forecasting for 2026-01-11 12:00:00+00:00...
+   📅 Forecasting for 2026-01-11 13:00:00+00:00...
+   📅 Forecasting for 2026-01-11 14:00:00+00:00...
+   📅 Forecasting for 2026-01-11 15:00:00+00:00...
+   📅 Forecasting for 2026-01-11 16:00:00+00:00...
+   📅 Forecasting for 2026-01-11 17:00:00+00:00...
+   📅 Forecasting for 2026-01-11 18:00:00+00:00...
+   📅 Forecasting for 2026-01-11 19:00:00+00:00...
+   📅 Forecasting for 2026-01-11 20:00:00+00:00...
+   📅 Forecasting for 2026-01-11 21:00:00+00:00...
 ✅ Generated 72 hourly forecasts for 3 days
-� Forecast range: 84.0 - 116.8 AQI
-📊 Forecast average: 99.0 AQI
+� Forecast range: 77.6 - 114.7 AQI
+📊 Forecast average: 97.3 AQI
 
 💾 Step 8: Saving results...
 
@@ -613,12 +614,12 @@ Explained Variance  : 0.9965
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2026-01-08 02:30:42 PKT
+⏰ Completed at: 2026-01-09 02:32:54 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2026-01-08 02:30:42,342 INFO: Closing external client and cleaning up certificates.
+2026-01-09 02:32:54,460 INFO: Closing external client and cleaning up certificates.
 Connection closed.
