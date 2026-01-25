@@ -1,20 +1,20 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2026-01-25 02:23:24 PKT
+🕐 Pipeline started at: 2026-01-26 02:24:24 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2026-01-25 02:23:26 PKT
+⏰ Started at: 2026-01-26 02:24:27 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/01_25_2026_0223_pkt
+📁 Output directory: randomforest_additional/01_26_2026_0224_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-25 02:23:26,934 INFO: Initializing external client
-2026-01-25 02:23:26,934 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-25 02:23:28,068 INFO: Python Engine initialized.
+2026-01-26 02:24:27,192 INFO: Initializing external client
+2026-01-26 02:24:27,192 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-26 02:24:28,140 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 865, in main
     splits, df_sorted = create_time_series_splits(df_processed)
@@ -30,7 +30,7 @@ Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.05s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.07s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 10885 records
 📊 Shape: (10885, 25)
@@ -56,18 +56,18 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2026-01-25 02:23:32 PKT
+⏰ Started at: 2026-01-26 02:24:32 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-25 02:23:32,273 INFO: Closing external client and cleaning up certificates.
+2026-01-26 02:24:32,185 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-25 02:23:32,275 INFO: Initializing external client
-2026-01-25 02:23:32,275 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-25 02:23:33,368 INFO: Python Engine initialized.
+2026-01-26 02:24:32,186 INFO: Initializing external client
+2026-01-26 02:24:32,187 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-26 02:24:33,073 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 819, in main
     splits, df_sorted = create_time_series_splits(df_processed)
@@ -83,7 +83,7 @@ Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.28s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.96s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 10885 records
 📊 Shape: (10885, 25)
@@ -106,21 +106,21 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2026-01-25 02:23:37 PKT
+⏰ Started at: 2026-01-26 02:24:36 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/01_25_2026_0223_pkt
+📁 Output directory: xgboost_additional/01_26_2026_0224_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-25 02:23:37,658 INFO: Closing external client and cleaning up certificates.
+2026-01-26 02:24:36,590 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-25 02:23:37,660 INFO: Initializing external client
-2026-01-25 02:23:37,660 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-25 02:23:38,626 INFO: Python Engine initialized.
+2026-01-26 02:24:36,592 INFO: Initializing external client
+2026-01-26 02:24:36,592 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-26 02:24:37,433 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 818, in main
     splits, df_sorted = create_time_series_splits(df_processed)
@@ -136,7 +136,7 @@ Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.42s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.98s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 10885 records
 📊 Shape: (10885, 25)
@@ -163,12 +163,12 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2026-01-25 02:23:42 PKT
+⏰ Completed at: 2026-01-26 02:24:40 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2026-01-25 02:23:42,762 INFO: Closing external client and cleaning up certificates.
+2026-01-26 02:24:40,892 INFO: Closing external client and cleaning up certificates.
 Connection closed.
