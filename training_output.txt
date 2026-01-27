@@ -1,20 +1,20 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2026-01-27 02:29:54 PKT
+🕐 Pipeline started at: 2026-01-28 02:26:04 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2026-01-27 02:29:57 PKT
+⏰ Started at: 2026-01-28 02:26:08 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/01_27_2026_0229_pkt
+📁 Output directory: randomforest_additional/01_28_2026_0226_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-27 02:29:57,260 INFO: Initializing external client
-2026-01-27 02:29:57,260 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-27 02:29:57,857 INFO: Python Engine initialized.
+2026-01-28 02:26:08,071 INFO: Initializing external client
+2026-01-28 02:26:08,071 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-28 02:26:09,037 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 865, in main
     splits, df_sorted = create_time_series_splits(df_processed)
@@ -30,7 +30,7 @@ Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (15.04s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.03s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 10885 records
 📊 Shape: (10885, 25)
@@ -56,156 +56,37 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ============================================================
 🚀 Training LightGBM Model
-⏰ Started at: 2026-01-27 02:30:19 PKT
+⏰ Started at: 2026-01-28 02:26:13 PKT
 ============================================================
 🚀 Starting AQI LGBM Training Pipeline
 ============================================================
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-27 02:30:19,916 INFO: Closing external client and cleaning up certificates.
+2026-01-28 02:26:13,068 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-27 02:30:19,918 INFO: Initializing external client
-2026-01-27 02:30:19,919 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-27 02:30:20,458 INFO: Python Engine initialized.
+2026-01-28 02:26:13,070 INFO: Initializing external client
+2026-01-28 02:26:13,070 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-28 02:26:13,946 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 819, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 367, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
+    raise ValueError(
+ValueError: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
 
 Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Successfully connected to Hopsworks
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Reading data from Hopsworks, using Hopsworks Feature Query Service   Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   2026-01-27 02:31:03,043 ERROR: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):
-  File "/usr/src/app/src/server.py", line 142, in wrapper
-    result = func(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 166, in wrapper
-    result = func(instance, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 196, in do_get
-    return self._read_query(context, path, command)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 123, in wrapper
-    return func(instance, *args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 131, in wrapper
-    result = func(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 227, in _read_query
-    result_batches = self.hudi_query_engine.read_query(query_obj)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_query_engine.py", line 63, in read_query
-    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(
-                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_hopsfs_client.py", line 55, in get_featuregroup_parquet_paths
-    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_hopsfs_client.py", line 185, in _get_partition_keys_from_metadata
-    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), "rt") as f:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1139, in open
-    self.open(
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1151, in open
-    f = self._open(
-        ^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 22, in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 178, in _open
-    stream = method(path, **_kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^
-  File "pyarrow/_fs.pyx", line 789, in pyarrow._fs.FileSystem.open_input_file
-  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
-  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
-OSError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "pyarrow/_flight.pyx", line 2255, in pyarrow._flight._do_get
-  File "/usr/src/app/src/server.py", line 145, in wrapper
-    raise FlyingDuckException(str(e)) from e
-utils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
-. gRPC client debug context: UNKNOWN:Error received from peer ipv4:51.79.26.27:5005 {created_time:"2026-01-27T02:31:03.043360485+05:00", grpc_status:2, grpc_message:"[Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):\n  File \"/usr/src/app/src/server.py\", line 142, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 166, in wrapper\n    result = func(instance, *args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 196, in do_get\n    return self._read_query(context, path, command)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 123, in wrapper\n    return func(instance, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 131, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 227, in _read_query\n    result_batches = self.hudi_query_engine.read_query(query_obj)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_query_engine.py\", line 63, in read_query\n    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 55, in get_featuregroup_parquet_paths\n    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 185, in _get_partition_keys_from_metadata\n    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), \"rt\") as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1139, in open\n    self.open(\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1151, in open\n    f = self._open(\n        ^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 22, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 178, in _open\n    stream = method(path, **_kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_fs.pyx\", line 789, in pyarrow._fs.FileSystem.open_input_file\n  File \"pyarrow/error.pxi\", line 155, in pyarrow.lib.pyarrow_internal_check_status\n  File \"pyarrow/error.pxi\", line 92, in pyarrow.lib.check_status\nOSError: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"pyarrow/_flight.pyx\", line 2255, in pyarrow._flight._do_get\n  File \"/usr/src/app/src/server.py\", line 145, in wrapper\n    raise FlyingDuckException(str(e)) from e\nutils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n"}. Client context: IOError: Server never sent a data message. Detail: Internal
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 394, in afs_error_handler_wrapper
-    return func(instance, *args, **kw)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 459, in read_query
-    return self._get_dataset(
-           ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 55, in wrapped_f
-    return Retrying(*dargs, **dkw).call(f, *args, **kw)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 279, in call
-    return attempt.get(self._wrap_exception)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 326, in get
-    raise exc.with_traceback(tb)
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/retrying.py", line 273, in call
-    attempt = Attempt(fn(*args, **kwargs), attempt_number, False)
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/hsfs/core/arrow_flight_client.py", line 445, in _get_dataset
-    reader = self._connection.do_get(info.endpoints[0].ticket, options)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "pyarrow/_flight.pyx", line 1745, in pyarrow._flight.FlightClient.do_get
-  File "pyarrow/_flight.pyx", line 58, in pyarrow._flight.check_flight_status
-pyarrow._flight.FlightServerError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):
-  File "/usr/src/app/src/server.py", line 142, in wrapper
-    result = func(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 166, in wrapper
-    result = func(instance, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 196, in do_get
-    return self._read_query(context, path, command)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 123, in wrapper
-    return func(instance, *args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 131, in wrapper
-    result = func(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/server.py", line 227, in _read_query
-    result_batches = self.hudi_query_engine.read_query(query_obj)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_query_engine.py", line 63, in read_query
-    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(
-                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_hopsfs_client.py", line 55, in get_featuregroup_parquet_paths
-    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/src/app/src/hudi_hopsfs_client.py", line 185, in _get_partition_keys_from_metadata
-    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), "rt") as f:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1139, in open
-    self.open(
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/spec.py", line 1151, in open
-    f = self._open(
-        ^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 22, in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py", line 178, in _open
-    stream = method(path, **_kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^
-  File "pyarrow/_fs.pyx", line 789, in pyarrow._fs.FileSystem.open_input_file
-  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
-  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
-OSError: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "pyarrow/_flight.pyx", line 2255, in pyarrow._flight._do_get
-  File "/usr/src/app/src/server.py", line 145, in wrapper
-    raise FlyingDuckException(str(e)) from e
-utils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file '/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties' failed. Detail: [errno 255] Unknown error 255
-. gRPC client debug context: UNKNOWN:Error received from peer ipv4:51.79.26.27:5005 {created_time:"2026-01-27T02:31:03.043360485+05:00", grpc_status:2, grpc_message:"[Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255. Detail: Python exception: Traceback (most recent call last):\n  File \"/usr/src/app/src/server.py\", line 142, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 166, in wrapper\n    result = func(instance, *args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 196, in do_get\n    return self._read_query(context, path, command)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 123, in wrapper\n    return func(instance, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 131, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/server.py\", line 227, in _read_query\n    result_batches = self.hudi_query_engine.read_query(query_obj)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_query_engine.py\", line 63, in read_query\n    hudi_featuregroups_paths[full_featuregroup_name] = self.hudi_hops_client.get_featuregroup_parquet_paths(\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 55, in get_featuregroup_parquet_paths\n    partition_keys = self._get_partition_keys_from_metadata(featuregroup_absolute_path)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/src/app/src/hudi_hopsfs_client.py\", line 185, in _get_partition_keys_from_metadata\n    with self.hopsfs.open(featuregroup_hoodie_properties_path.as_posix(), \"rt\") as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1139, in open\n    self.open(\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/spec.py\", line 1151, in open\n    f = self._open(\n        ^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 22, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/venv/lib/python3.11/site-packages/fsspec/implementations/arrow.py\", line 178, in _open\n    stream = method(path, **_kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_fs.pyx\", line 789, in pyarrow._fs.FileSystem.open_input_file\n  File \"pyarrow/error.pxi\", line 155, in pyarrow.lib.pyarrow_internal_check_status\n  File \"pyarrow/error.pxi\", line 92, in pyarrow.lib.check_status\nOSError: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"pyarrow/_flight.pyx\", line 2255, in pyarrow._flight._do_get\n  File \"/usr/src/app/src/server.py\", line 145, in wrapper\n    raise FlyingDuckException(str(e)) from e\nutils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file \'/apps/hive/warehouse/anassale_featurestore.db/karachifeatures10_1/.hoodie/hoodie.properties\' failed. Detail: [errno 255] Unknown error 255\n"}. Client context: IOError: Server never sent a data message. Detail: Internal
-Error: Reading data from Hopsworks, using Hopsworks Feature Query Service           
-❌ Failed to retrieve features from Hopsworks: Could not read data using Hopsworks Query Service.
-⚠️ Trying local CSV files...
-📁 Loading data from local file: retrieved_karachi_aqi_features15.csv
-✅ Loaded 9704 records from retrieved_karachi_aqi_features15.csv
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.95s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 10885 records
+📊 Shape: (10885, 25)
 🔧 Preprocessing data...
    🧹 Handling missing values...
    📊 Ensuring engineered features are properly calculated...
@@ -214,162 +95,32 @@ utils.exceptions.FlyingDuckException: [Errno 255] Opening HDFS file '/apps/hive/
    ➕ Creating lag features for pm10_nowcast...
    ➕ Creating lag features for co_ppm_8hr_avg...
    ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 9699 records
-📊 Final dataset shape: (9699, 22)
+   ✅ After preprocessing: 10880 records
+📊 Final dataset shape: (10880, 22)
 🎯 Target variable range: 9.0 - 500.0
 📊 Creating time series splits...
-⚠️ Skipping split - insufficient training data: 4 samples
-✅ Created 4 time series splits
-
-🔁 Processing split 1/4
-----------------------------------------
-   Train: 1555 samples
-   Val:   388 samples
-   Test:  1939 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 44.9789
-Early stopping, best iteration is:
-[56]	valid_0's l2: 43.5622
-✅ Model trained with 56 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 13.5400
-RMSE                : 34.4504
-R2                  : 0.8454
-MAPE                : 0.0417
-Explained Variance  : 0.8579
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-🔍 Performing LIME analysis...
-Intercept 64.11116504286281
-Prediction_local [161.31660424]
-Right: 155.71858082848888
-
-🔁 Processing split 2/4
-----------------------------------------
-   Train: 3106 samples
-   Val:   776 samples
-   Test:  1939 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 19.6157
-Early stopping, best iteration is:
-[109]	valid_0's l2: 19.5125
-✅ Model trained with 109 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 2.3739
-RMSE                : 4.2786
-R2                  : 0.9979
-MAPE                : 0.0292
-Explained Variance  : 0.9979
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🔁 Processing split 3/4
-----------------------------------------
-   Train: 4657 samples
-   Val:   1164 samples
-   Test:  1939 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 13.7992
-[200]	valid_0's l2: 13.0689
-Early stopping, best iteration is:
-[206]	valid_0's l2: 12.9779
-✅ Model trained with 206 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.6232
-RMSE                : 2.5693
-R2                  : 0.9865
-MAPE                : 0.0237
-Explained Variance  : 0.9875
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🔁 Processing split 4/4
-----------------------------------------
-   Train: 6208 samples
-   Val:   1552 samples
-   Test:  1939 samples
-🤖 Training LightGBM model...
-✅ Using optimized hyperparameters
-Training until validation scores don't improve for 50 rounds
-[100]	valid_0's l2: 2.58619
-[200]	valid_0's l2: 2.53265
-Early stopping, best iteration is:
-[212]	valid_0's l2: 2.51774
-✅ Model trained with 212 iterations
-📊 Evaluating model performance...
-
-📈 Model Performance Metrics:
-==================================================
-MAE                 : 1.1765
-RMSE                : 2.6242
-R2                  : 0.9973
-MAPE                : 0.0360
-Explained Variance  : 0.9973
-📊 Plotting feature importance...
-🔍 Performing SHAP analysis...
-
-🏆 Best model from split 3 with RMSE: 2.5693
-
-🌤️  Generating 3-day AQI forecasts...
-🔮 Generating 3-day AQI forecast using recursive approach...
-✅ Generated 72 hourly forecasts for 3 days
-📈 Forecast range: 160.1 - 191.3 AQI
-📊 Forecast average: 173.9 AQI
-
-📊 Forecast Summary:
-========================================
-Forecast period: 2025-11-23 18:00:00 to 2025-11-26 17:00:00
-Forecast range: 160.1 - 191.3 AQI
-Average forecast: 173.9 AQI
-💾 Saving model and results...
-✅ Forecasts saved to lgbm_additional/01_27_2026_0231_pkt/aqi_3_day_forecast.csv
-✅ Model and results saved successfully to lgbm_additional/01_27_2026_0231_pkt
-
-📊 Overall Cross-Validation Results:
-==================================================
-MAE                 : 4.6784 (avg)
-RMSE                : 10.9806 (avg)
-R2                  : 0.9568 (avg)
-MAPE                : 0.0327 (avg)
-Explained Variance  : 0.9602 (avg)
-
-🎉 Training pipeline completed successfully!
+❌ Pipeline failed: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
 
 ✅ LightGBM training completed successfully!
    Result: None
 
 ============================================================
 🚀 Training XGBoost Model
-⏰ Started at: 2026-01-27 02:31:20 PKT
+⏰ Started at: 2026-01-28 02:26:17 PKT
 ============================================================
 🚀 Starting AQI XGBoost Training Pipeline...
 ============================================================
-📁 Output directory: xgboost_additional/01_27_2026_0231_pkt
+📁 Output directory: xgboost_additional/01_28_2026_0226_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 📁 Attempting to load data from RandomForest CSV first...
 ❌ No RandomForest CSV files found, trying general CSV files...
 🔗 Connecting to Hopsworks project: anassale
-2026-01-27 02:31:20,788 INFO: Closing external client and cleaning up certificates.
+2026-01-28 02:26:17,531 INFO: Closing external client and cleaning up certificates.
 Connection closed.
-2026-01-27 02:31:20,790 INFO: Initializing external client
-2026-01-27 02:31:20,790 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-01-27 02:31:21,331 INFO: Python Engine initialized.
+2026-01-28 02:26:17,533 INFO: Initializing external client
+2026-01-28 02:26:17,533 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-01-28 02:26:18,416 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 818, in main
     splits, df_sorted = create_time_series_splits(df_processed)
@@ -385,7 +136,7 @@ Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
 ✅ Latest version of karachifeatures10: 1
 📥 Retrieving features from: karachifeatures10 (v1)
 📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.94s) 
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.95s) 
 🔄 Sorting data by datetime for chronological order...
 ✅ Successfully retrieved 10885 records
 📊 Shape: (10885, 25)
@@ -412,12 +163,12 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2026-01-27 02:31:23 PKT
+⏰ Completed at: 2026-01-28 02:26:21 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2026-01-27 02:31:23,965 INFO: Closing external client and cleaning up certificates.
+2026-01-28 02:26:21,971 INFO: Closing external client and cleaning up certificates.
 Connection closed.
