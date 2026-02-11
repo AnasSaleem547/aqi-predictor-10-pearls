@@ -1,131 +1,25 @@
 🎯 Unified AQI Model Training Pipeline
-🕐 Pipeline started at: 2026-02-11 02:47:22 PKT
+🕐 Pipeline started at: 2026-02-12 02:38:23 PKT
 ======================================================================
 
 ============================================================
 🚀 Training RandomForest Model
-⏰ Started at: 2026-02-11 02:47:26 PKT
+⏰ Started at: 2026-02-12 02:38:26 PKT
 ============================================================
 🚀 Starting AQI Random Forest Training Pipeline...
 ============================================================
-📁 Output directory: randomforest_additional/02_11_2026_0247_pkt
+📁 Output directory: randomforest_additional/02_12_2026_0238_pkt
 
 📊 Step 1: Fetching data from Hopsworks...
 🔗 Connecting to Hopsworks project: anassale
-2026-02-11 02:47:26,081 INFO: Initializing external client
-2026-02-11 02:47:26,081 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-02-11 02:47:26,824 INFO: Python Engine initialized.
+2026-02-12 02:38:26,155 INFO: Initializing external client
+2026-02-12 02:38:26,156 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-02-12 02:38:26,992 INFO: Python Engine initialized.
 Traceback (most recent call last):
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 865, in main
     splits, df_sorted = create_time_series_splits(df_processed)
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_randomforest_training_pipeline.py", line 430, in create_time_series_splits
-    for train_index, test_index in tscv.split(df_sorted):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
-    raise ValueError(
-ValueError: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
-
-Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
-✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 1
-📥 Retrieving features from: karachifeatures10 (v1)
-📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.56s) 
-🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 10885 records
-📊 Shape: (10885, 25)
-
-🔧 Step 2: Preprocessing data...
-🔧 Preprocessing data...
-   🧹 Handling missing values...
-   📊 Ensuring engineered features are properly calculated...
-   ➕ Creating lag features for pollutants...
-   ➕ Creating lag features for pm2_5_nowcast...
-   ➕ Creating lag features for pm10_nowcast...
-   ➕ Creating lag features for co_ppm_8hr_avg...
-   ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 10880 records
-
-📊 Step 3: Creating time series splits...
-📊 Creating time series splits...
-
-❌ Error in training pipeline: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
-
-✅ RandomForest training completed successfully!
-   Result: (None, None, None)
-
-============================================================
-🚀 Training LightGBM Model
-⏰ Started at: 2026-02-11 02:47:29 PKT
-============================================================
-🚀 Starting AQI LGBM Training Pipeline
-============================================================
-📁 Attempting to load data from RandomForest CSV first...
-❌ No RandomForest CSV files found, trying general CSV files...
-🔗 Connecting to Hopsworks project: anassale
-2026-02-11 02:47:29,495 INFO: Closing external client and cleaning up certificates.
-Connection closed.
-2026-02-11 02:47:29,497 INFO: Initializing external client
-2026-02-11 02:47:29,498 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-02-11 02:47:30,148 INFO: Python Engine initialized.
-Traceback (most recent call last):
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 819, in main
-    splits, df_sorted = create_time_series_splits(df_processed)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 367, in create_time_series_splits
-    for train_index, test_index in tscv.split(df_sorted):
-  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
-    raise ValueError(
-ValueError: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
-
-Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
-✅ Successfully connected to Hopsworks
-✅ Latest version of karachifeatures10: 1
-📥 Retrieving features from: karachifeatures10 (v1)
-📋 Retrieving all records...
-Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.60s) 
-🔄 Sorting data by datetime for chronological order...
-✅ Successfully retrieved 10885 records
-📊 Shape: (10885, 25)
-🔧 Preprocessing data...
-   🧹 Handling missing values...
-   📊 Ensuring engineered features are properly calculated...
-   ➕ Creating lag features for pollutants...
-   ➕ Creating lag features for pm2_5_nowcast...
-   ➕ Creating lag features for pm10_nowcast...
-   ➕ Creating lag features for co_ppm_8hr_avg...
-   ➕ Creating lag features for no2_ppb...
-   ✅ After preprocessing: 10880 records
-📊 Final dataset shape: (10880, 22)
-🎯 Target variable range: 9.0 - 500.0
-📊 Creating time series splits...
-❌ Pipeline failed: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
-
-✅ LightGBM training completed successfully!
-   Result: None
-
-============================================================
-🚀 Training XGBoost Model
-⏰ Started at: 2026-02-11 02:47:32 PKT
-============================================================
-🚀 Starting AQI XGBoost Training Pipeline...
-============================================================
-📁 Output directory: xgboost_additional/02_11_2026_0247_pkt
-
-📊 Step 1: Fetching data from Hopsworks...
-📁 Attempting to load data from RandomForest CSV first...
-❌ No RandomForest CSV files found, trying general CSV files...
-🔗 Connecting to Hopsworks project: anassale
-2026-02-11 02:47:32,767 INFO: Closing external client and cleaning up certificates.
-Connection closed.
-2026-02-11 02:47:32,769 INFO: Initializing external client
-2026-02-11 02:47:32,769 INFO: Base URL: https://c.app.hopsworks.ai:443
-2026-02-11 02:47:33,303 INFO: Python Engine initialized.
-Traceback (most recent call last):
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 818, in main
-    splits, df_sorted = create_time_series_splits(df_processed)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 366, in create_time_series_splits
     for train_index, test_index in tscv.split(df_sorted):
   File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
     raise ValueError(
@@ -157,18 +51,124 @@ Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading d
 
 ❌ Error in training pipeline: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
 
+✅ RandomForest training completed successfully!
+   Result: (None, None, None)
+
+============================================================
+🚀 Training LightGBM Model
+⏰ Started at: 2026-02-12 02:38:29 PKT
+============================================================
+🚀 Starting AQI LGBM Training Pipeline
+============================================================
+📁 Attempting to load data from RandomForest CSV first...
+❌ No RandomForest CSV files found, trying general CSV files...
+🔗 Connecting to Hopsworks project: anassale
+2026-02-12 02:38:29,743 INFO: Closing external client and cleaning up certificates.
+Connection closed.
+2026-02-12 02:38:29,744 INFO: Initializing external client
+2026-02-12 02:38:29,745 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-02-12 02:38:30,536 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 819, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_lgbm_training_pipeline.py", line 367, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
+    raise ValueError(
+ValueError: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
+
+Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
+✅ Successfully connected to Hopsworks
+✅ Latest version of karachifeatures10: 1
+📥 Retrieving features from: karachifeatures10 (v1)
+📋 Retrieving all records...
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Reading data from Hopsworks, using Hopsworks Feature Query Service...   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (1.03s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 10885 records
+📊 Shape: (10885, 25)
+🔧 Preprocessing data...
+   🧹 Handling missing values...
+   📊 Ensuring engineered features are properly calculated...
+   ➕ Creating lag features for pollutants...
+   ➕ Creating lag features for pm2_5_nowcast...
+   ➕ Creating lag features for pm10_nowcast...
+   ➕ Creating lag features for co_ppm_8hr_avg...
+   ➕ Creating lag features for no2_ppb...
+   ✅ After preprocessing: 10880 records
+📊 Final dataset shape: (10880, 22)
+🎯 Target variable range: 9.0 - 500.0
+📊 Creating time series splits...
+❌ Pipeline failed: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
+
+✅ LightGBM training completed successfully!
+   Result: None
+
+============================================================
+🚀 Training XGBoost Model
+⏰ Started at: 2026-02-12 02:38:33 PKT
+============================================================
+🚀 Starting AQI XGBoost Training Pipeline...
+============================================================
+📁 Output directory: xgboost_additional/02_12_2026_0238_pkt
+
+📊 Step 1: Fetching data from Hopsworks...
+📁 Attempting to load data from RandomForest CSV first...
+❌ No RandomForest CSV files found, trying general CSV files...
+🔗 Connecting to Hopsworks project: anassale
+2026-02-12 02:38:33,757 INFO: Closing external client and cleaning up certificates.
+Connection closed.
+2026-02-12 02:38:33,759 INFO: Initializing external client
+2026-02-12 02:38:33,759 INFO: Base URL: https://c.app.hopsworks.ai:443
+2026-02-12 02:38:34,375 INFO: Python Engine initialized.
+Traceback (most recent call last):
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 818, in main
+    splits, df_sorted = create_time_series_splits(df_processed)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/aqi-predictor-10-pearls/aqi-predictor-10-pearls/aqi_xgboost_training_pipeline.py", line 366, in create_time_series_splits
+    for train_index, test_index in tscv.split(df_sorted):
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/model_selection/_split.py", line 1301, in _split
+    raise ValueError(
+ValueError: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
+
+Logged in to project, explore it here https://c.app.hopsworks.ai:443/p/1263764
+✅ Successfully connected to Hopsworks
+✅ Latest version of karachifeatures10: 1
+📥 Retrieving features from: karachifeatures10 (v1)
+📋 Retrieving all records...
+Reading data from Hopsworks, using Hopsworks Feature Query Service.   Reading data from Hopsworks, using Hopsworks Feature Query Service..   Finished: Reading data from Hopsworks, using Hopsworks Feature Query Service (0.65s) 
+🔄 Sorting data by datetime for chronological order...
+✅ Successfully retrieved 10885 records
+📊 Shape: (10885, 25)
+
+🔧 Step 2: Preprocessing data...
+🔧 Preprocessing data...
+   🧹 Handling missing values...
+   📊 Ensuring engineered features are properly calculated...
+   ➕ Creating lag features for pollutants...
+   ➕ Creating lag features for pm2_5_nowcast...
+   ➕ Creating lag features for pm10_nowcast...
+   ➕ Creating lag features for co_ppm_8hr_avg...
+   ➕ Creating lag features for no2_ppb...
+   ✅ After preprocessing: 10880 records
+
+📊 Step 3: Creating time series splits...
+📊 Creating time series splits...
+
+❌ Error in training pipeline: Too many splits=5 for number of samples=10880 with test_size=2176 and gap=0.
+
 ✅ XGBoost training completed successfully!
    Result: (None, None, None)
 
 ======================================================================
 📊 TRAINING SUMMARY
 ======================================================================
-⏰ Completed at: 2026-02-11 02:47:35 PKT
+⏰ Completed at: 2026-02-12 02:38:37 PKT
 ✅ Successful: 3/3 models
    ✅ RandomForest
    ✅ LightGBM
    ✅ XGBoost
 
 🎉 All models trained successfully!
-2026-02-11 02:47:35,875 INFO: Closing external client and cleaning up certificates.
+2026-02-12 02:38:37,154 INFO: Closing external client and cleaning up certificates.
 Connection closed.
